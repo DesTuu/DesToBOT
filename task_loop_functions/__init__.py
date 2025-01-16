@@ -5,5 +5,6 @@ from task_loop_functions.auto_weather import auto_weather
 from task_loop_functions.auto_currencies import auto_currencies
 # from task_loop_functions.auto_last_minute import auto_last_minute
 from task_loop_functions.auto_bus_check_update import auto_bus_check_update
-from task_loop_functions.auto_jobs import auto_jobs
+# from task_loop_functions.auto_jobs_old import auto_jobs
 # from task_loop_functions.auto_quiz import auto_quiz
+from task_loop_functions.async_auto_pracuj import async_auto_pracuj

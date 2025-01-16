@@ -5,7 +5,7 @@ import pathlib
 import discord
 
 
-COOLDOWN_DURATION = 20
+COOLDOWN_DURATION = 10
 
 activities = [
     discord.Game(name='!help'),

@@ -84,65 +84,38 @@ if __name__ == "__main__":
             return None
 
         async def process_channel(channel, delta_days, task_function):
-            last_message = await fetch_last_message(channel)
-            if last_message:
-                date_now = datetime.now(timezone.utc)
-                created_date = last_message.created_at
-                delta = date_now - created_date
-                if delta > timedelta(days=delta_days):
-                    if task_function():
-                        await channel.send(task_function()[:2000])
+            try:
+                last_message = await fetch_last_message(channel)
+                if last_message:
+                    date_now = datetime.now(timezone.utc)
+                    created_date = last_message.created_at
+                    delta = date_now - created_date
+                    if delta > timedelta(days=delta_days):
+                        if asyncio.iscoroutinefunction(task_function):
+                            result = await task_function()
+                        else:
+                            result = task_function()
+                        if result:
+                            await channel.send(result[:2000])
+            except Exception as e:
+                logger.error(f"Error processing channel {channel.name}: {e}")
 
-        auto_concerts_channel = bot.get_channel(1280585325978058884)
-        # renew_channel = bot.get_channel(1280584125316730880)
-        auto_weather_channel = bot.get_channel(1280584215624290414)
-        auto_currencies_channel = bot.get_channel(1280585526537093243)
+        channel_tasks = [
+            (bot.get_channel(1280585325978058884), 5, task_loop_functions.auto_concerts),
+            (bot.get_channel(1280584215624290414), 2, task_loop_functions.auto_weather),
+            (bot.get_channel(1280585526537093243), 4, task_loop_functions.auto_currencies),
+            (bot.get_channel(1280585391501742171), 3, task_loop_functions.async_auto_pracuj)
+        ]
+
+        for channel, delta_days, task_function in channel_tasks:
+            await process_channel(channel, delta_days, task_function)
+            await asyncio.sleep(settings.COOLDOWN_DURATION)
+
         auto_bus_check_update_channel = bot.get_channel(1280584043037196349)
-        auto_jobs_channel = bot.get_channel(1280585391501742171)
-
-        await process_channel(auto_concerts_channel, 2, task_loop_functions.auto_concerts)
-        await asyncio.sleep(settings.COOLDOWN_DURATION)
-
-        await process_channel(auto_weather_channel, 1, task_loop_functions.auto_weather)
-        await asyncio.sleep(settings.COOLDOWN_DURATION)
-
-        await process_channel(auto_currencies_channel, 4, task_loop_functions.auto_currencies)
-        await asyncio.sleep(settings.COOLDOWN_DURATION)
-
-        await process_channel(auto_jobs_channel, 3, task_loop_functions.auto_jobs)
-        await asyncio.sleep(settings.COOLDOWN_DURATION)
-
         try:
             await auto_bus_check_update_channel.send(task_loop_functions.auto_bus_check_update()[:2000])
         except (AttributeError, TypeError):
             pass
-
-        # await process_channel(renew_channel, 21, lambda: 'https://client.pylexnodes.net/servers/edit?id=26839')
-
-        # -----------------------------------------------------------------------------------------------------------------
-        # quiz
-
-        # await asyncio.sleep(settings.COOLDOWN_DURATION)
-        #
-        # warsaw_tz = pytz.timezone('Europe/Warsaw')
-        # now = datetime.now(warsaw_tz)
-        #
-        # if now.hour % 2 == 0 and now.minute == 0:
-        #     pass
-        # elif now.hour % 2 == 0 and now.minute != 0:
-        #     next_even_hour = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=2)
-        #     wait_seconds = (next_even_hour - now).total_seconds()
-        #     await asyncio.sleep(wait_seconds)
-        # else:
-        #     next_even_hour = now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-        #     wait_seconds = (next_even_hour - now).total_seconds()
-        #     await asyncio.sleep(wait_seconds)
-        #
-        # await task_loop_functions.auto_quiz(bot)
-
-
-    # -----------------------------------------------------------------------------------------------------------------
-    # before_task_loop
 
     @task_loop.before_loop
     async def before_task_loop():
