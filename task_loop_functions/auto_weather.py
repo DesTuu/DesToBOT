@@ -15,10 +15,23 @@ def auto_weather():
     cloudy = soup.find_all('span', class_='weather-forecast-longterm-list-entry-cloudy-cloudy-value')
     rain = soup.find_all('span', class_='weather-forecast-longterm-list-entry-precipitation-value')
 
-    for i in range(3):
-        weather_string += f"- {str(day_of_week[i].text)[:3]} {date[i].text} " \
-                          f"**od {min_c[i].text} do {max_c[i].text}** - " \
-                          f"☁ {cloudy[i].text} - " \
-                          f"🌧️ {rain[i].text}\n"
+    weather_string += "```\n"
+    weather_string += (
+        f"{'Dzień'.center(12)} │ {'Data'.center(8)} │ {'Temperatura'.center(19)} │ "
+        f"{'Zachmurzenie'.center(12)} │ {'Opady'.center(10)}\n"
+    )
+    weather_string += "─" * (len(weather_string) - 54) + "\n"
+
+    for i in range(20):
+        weather_string += (
+            f"{str(day_of_week[i].text)[:12].center(12)} │ "
+            f"{date[i].text.center(8)} │ "
+            f"{f'od {min_c[i].text} do {max_c[i].text}'.center(19)} │ "
+            f"{cloudy[i].text.center(12)} │ "
+            f"{rain[i].text.center(10)}\n"
+        )
+
+    weather_string += "```"
 
     return weather_string[:2000]
+
