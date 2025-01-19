@@ -79,9 +79,9 @@ if __name__ == "__main__":
                         retries -= 1
                         await asyncio.sleep(5 ** (6 - retries))
                     else:
+                        logger.warning(f"Failed to fetch history from {channel.name} due to {e}")
                         raise
-            logger.warning(f"Failed to fetch history from {channel.name}")
-            return None
+            return f"Błąd podczas fetch_last_message"
 
         async def process_channel(channel, delta_days, task_function):
             try:
@@ -97,6 +97,8 @@ if __name__ == "__main__":
                             result = task_function()
                         if result:
                             await channel.send(result[:2000])
+                        else:
+                            await channel.send(f"Błąd podczas process_channel")
             except Exception as e:
                 logger.error(f"Error processing channel {channel.name}: {e}")
 
