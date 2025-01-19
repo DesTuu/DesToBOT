@@ -31,9 +31,7 @@ class BanCounter(commands.Cog):
     async def update_target_guild(self):
         await self.bot.wait_until_ready()
         guild = self.bot.get_guild(TARGET_GUILD_ID)
-        # await asyncio.sleep(settings.COOLDOWN_DURATION)
         await update_ban_counter(guild)
-        # await asyncio.sleep(settings.COOLDOWN_DURATION)
 
     @commands.Cog.listener()
     async def on_member_ban(self, guild, user):

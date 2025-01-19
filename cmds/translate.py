@@ -23,10 +23,8 @@ async def translate(ctx: commands.Context, target_language: str = "polish", *, t
         embed.add_field(name="Oryginalny tekst", value=text, inline=False)
         embed.add_field(name="Przetłumaczony tekst", value=translated_text, inline=False)
 
-        # Wyślij wiadomość
         await ctx.send(embed=embed)
     except Exception as e:
-        # Obsłuż błędy (np. błędny język)
         await ctx.send(f"Wystąpił błąd podczas tłumaczenia: {e}")
 
 async def setup(bot: commands.Bot):

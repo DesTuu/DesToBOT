@@ -14,16 +14,12 @@ urls = [f"https://jbzd.com.pl/str/{i}" for i in range(1, 21)]
 
 
 async def fetcher(session: aiohttp.ClientSession, url: str) -> list:
-    """
-    Fetches image URLs and titles from a given URL.
-    """
     async with semaphore, session.get(url) as response:
         if response.status != 200:
             return []
         text = await response.text()
         soup = BeautifulSoup(text, 'lxml')
 
-        # Extract images and titles
         soup_images = soup.findAll('div', attrs={'class': 'article-image article-media-image'})
         soup_titles = soup.find_all("h3", class_="article-title")
 
@@ -42,24 +38,18 @@ async def fetcher(session: aiohttp.ClientSession, url: str) -> list:
     brief=f"{settings.PREFIX}async_mem - wysyła memy (ulepszona wersja)",
 )
 async def async_mem(ctx: commands.Context) -> None:
-    """
-    Fetch memes from jbzd.com.pl and send them to the Discord channel.
-    """
     async with aiohttp.ClientSession() as session:
         tasks = [fetcher(session, url) for url in urls]
         results = await gather(*tasks)
 
-    # Flatten the results
     all_data = [item for result in results for item in result]
 
     if not all_data:
         await ctx.send("No memes could be fetched. Please try again later.", ephemeral=True)
         return
 
-    # Randomly select up to 6 items (image and title pairs)
     random_data = random.sample(all_data, min(len(all_data), 6))
 
-    # Send each as an embed
     for image, title in random_data:
         embed = discord.Embed(
             title=title,

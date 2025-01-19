@@ -13,7 +13,6 @@ async def hug(ctx: commands.Context, user: discord.Member) -> None:
     embed = discord.Embed(
         title="",
         description=f"{ctx.author.mention} przytula {user.mention}!",
-        # mention to oznaczenie/ping
         color=ctx.author.color
     )
 

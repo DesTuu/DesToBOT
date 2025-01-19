@@ -48,7 +48,6 @@ class MyOnMessages(commands.Cog):
         else:
             return {}
 
-    # Save points data to JSON file (buffered)
     def save_points(self, force=False):
         with open(settings.BUMP_POINTS_FILE, "w") as f:
             json.dump(self.points, f, indent=4)

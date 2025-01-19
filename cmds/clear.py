@@ -14,10 +14,8 @@ async def cls(ctx: commands.Context, message_id: str) -> None:
         return
 
     try:
-        # Convert the string ID to an integer
         message_id = int(message_id)
 
-        # Fetch the message by ID to ensure it exists
         msg = await ctx.channel.fetch_message(message_id)
     except ValueError:
         await ctx.send("Nieprawidłowy format ID wiadomości.", ephemeral=True)
@@ -32,21 +30,17 @@ async def cls(ctx: commands.Context, message_id: str) -> None:
         await ctx.send("Wystąpił błąd podczas pobierania wiadomości.", ephemeral=True)
         return
 
-    # Purge messages that were sent after the specified message ID
-
     def check(message):
         return message.id >= message_id
 
     try:
         deleted = await ctx.channel.purge(check=check)
     except discord.errors.HTTPException as e:
-        # Handle potential errors during the deletion
         if isinstance(e, discord.errors.NotFound):
             print(f"Message not found: {e}")
         else:
             print(f"HTTP Exception: {e}")
     except Exception as e:
-        # Catch any other unexpected errors
         print(f"Unexpected error: {e}")
 
 

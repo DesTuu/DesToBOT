@@ -5,7 +5,6 @@ import json
 import os
 
 
-# Load points data from a file
 def bump_load_points():
     if os.path.exists(settings.BUMP_POINTS_FILE):
         with open(settings.BUMP_POINTS_FILE, "r") as f:
@@ -21,10 +20,8 @@ async def top_bump(ctx: commands.Context, is_private: bool = True) -> None:
         await ctx.send("Wariant `is_private` przyjmuje tylko wartości True lub False.", ephemeral=True)
         return
 
-    # Load bump points once
     bump_points = bump_load_points()
 
-    # Sort the bump points in-memory and get the top 10
     bump_top_users = sorted(bump_points.items(), key=lambda item: item[1], reverse=True)[:10]
 
     if bump_top_users:
