@@ -17,18 +17,18 @@ def auto_weather():
 
     weather_string += "```\n"
     weather_string += (
-        f"{'Dzień'.center(12)} │ {'Data'.center(8)} │ {'Temperatura'.center(19)} │ "
-        f"{'Zachmurzenie'.center(12)} │ {'Opady'.center(10)}\n"
+        f"{'Dzień'.center(5)}│{'Datum'.center(5)}│{'Temperatura'.center(15)}│"
+        f"{'Chmu'.center(4)}│{'Opady'.center(6)}\n"
     )
-    weather_string += "─" * (len(weather_string) - 54) + "\n"
+    weather_string += "─" * (len(weather_string) - 56) + "\n"
 
     for i in range(20):
         weather_string += (
-            f"{str(day_of_week[i].text)[:12].center(12)} │ "
-            f"{date[i].text.center(8)} │ "
-            f"{f'od {min_c[i].text} do {max_c[i].text}'.center(19)} │ "
-            f"{cloudy[i].text.center(12)} │ "
-            f"{rain[i].text.center(10)}\n"
+            f"{str(day_of_week[i].text)[:3].center(5)}│"
+            f"{date[i].text.center(5)}│"
+            f"{f'{min_c[i].text} do {max_c[i].text}'.center(15)}│"
+            f"{cloudy[i].text.center(4)}│"
+            f"{rain[i].text.center(6)}\n"
         )
 
     weather_string += "```"
