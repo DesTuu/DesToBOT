@@ -142,9 +142,8 @@ class MyOnMessages(commands.Cog):
 
             await last_message.delete()
 
-            new_message = await channel.send("```Znajdź tu graczy do gry! Jak?: \n\n"
-                               "Najlepiej wejdź na kanał głosowy i spinguj odpowiednią rolę! \n"
-                               "Wpisz nazwę gry np. @Warframe i wybierz ping z listy!```")
+            new_message = await channel.send("- **Spinguj rolę gry, wpisz np. @Warframe!** \n"
+                               "- **Następnie wejdź koniecznie od razu na kanał głosowy (możesz czekać zmutowany)!** \n")
 
             with open(settings.LAST_MSG_ID, "w") as f:
                 f.write(str(new_message.id))
