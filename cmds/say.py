@@ -3,7 +3,7 @@ import settings
 
 
 @commands.hybrid_command(
-    brief=f"{settings.PREFIX}say treśćwiadomości - przekazujesz wiadomość jako destobot",
+    brief=f"{settings.PREFIX}say treśćwiadomości - przekazujesz wiadomość jako bot",
 )
 async def say(ctx: commands.Context, message) -> None:
     await ctx.send(message)
