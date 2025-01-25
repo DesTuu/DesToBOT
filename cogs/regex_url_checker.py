@@ -12,8 +12,8 @@ class RegexUrlChecker(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        if message.guild.id == 1056134342826528808:
-            discord_admin_role_id = 1300612523179118683  # Your role ID
+        if message.guild and message.guild.id == 1056134342826528808:
+            discord_admin_role_id = 1300612523179118683
             if not any(role.id == discord_admin_role_id for role in message.author.roles):
                 # print("Użytkownik nie jest w administracji")
                 url_pattern = r"https?://"
