@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import matplotlib.pyplot as plt
+import io
 
 
 def auto_weather():
@@ -22,7 +24,15 @@ def auto_weather():
     )
     weather_string += "─" * (len(weather_string) - 56) + "\n"
 
+    min_c_list = []
+    max_c_list = []
+    days_list = []
+
     for i in range(20):
+        min_c_list.append(int(min_c[i].text.replace("°C", "").strip()))
+        max_c_list.append(int(max_c[i].text.replace("°C", "").strip()))
+        days_list.append(date[i].text[:2])
+
         weather_string += (
             f"{str(day_of_week[i].text)[:3].center(5)}│"
             f"{date[i].text.center(5)}│"
@@ -33,5 +43,22 @@ def auto_weather():
 
     weather_string += "```"
 
-    return weather_string[:2000]
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(days_list, min_c_list, label="min C", color='blue')
+    ax.plot(days_list, max_c_list, label="max C", color='red')
+
+
+    ax.set_title("Wykres temperatur w moim mieście")
+    ax.set_xlabel("Dzień danego miesiąca")
+    ax.set_ylabel("Temperatura °C")
+    ax.axhline(0, color='black', linestyle='--', linewidth=1.5)
+    ax.grid(True)
+    ax.legend()
+
+    io_temp_file = io.BytesIO()
+    fig.savefig(io_temp_file, format='png', dpi=300)
+    io_temp_file.seek(0)
+    plt.close()
+
+    return weather_string[:2000], io_temp_file
 

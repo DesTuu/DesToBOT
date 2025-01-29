@@ -95,10 +95,18 @@ if __name__ == "__main__":
                             result = await task_function()
                         else:
                             result = task_function()
-                        if result:
-                            await channel.send(result[:2000])
+                        if isinstance(result, tuple):
+                            text, image_file = result
                         else:
-                            await channel.send(f"Błąd podczas process_channel")
+                            text, image_file = result, None
+
+                        if text:
+                            if image_file:
+                                await channel.send(content=text, file=discord.File(image_file, "weather_plot.png"))
+                            else:
+                                await channel.send(text[:2000])
+                        else:
+                            await channel.send("Błąd podczas process_channel")
             except Exception as e:
                 logger.error(f"Error processing channel {channel.name}: {e}")
 
@@ -118,6 +126,7 @@ if __name__ == "__main__":
             await auto_bus_check_update_channel.send(task_loop_functions.auto_bus_check_update()[:2000])
         except (AttributeError, TypeError):
             pass
+
 
     @task_loop.before_loop
     async def before_task_loop():
