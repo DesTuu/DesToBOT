@@ -16,7 +16,10 @@ async def update_ban_counter(guild):
         ban_count += 1
 
     channel = guild.get_channel(TARGET_CHANNEL_ID)
-    await channel.edit(name=f'🔨│Bans: {ban_count}')
+    if "│" in channel.name:
+        await channel.edit(name=f'🔨│Bans: {ban_count}')
+    else:
+        await channel.edit(name=f'「🔨」Bans: {ban_count}')
 
 
 class BanCounter(commands.Cog):
