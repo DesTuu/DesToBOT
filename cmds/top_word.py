@@ -10,11 +10,14 @@ import io
 @commands.hybrid_command(
     brief=f"{settings.PREFIX}top_word - topka słów z kanału"
 )
-async def top_word(ctx, channel_id: str = ""):
+async def top_word(ctx, limit_of_msgs: int = 500):
+    if not 0 < limit_of_msgs < 5000:
+        await ctx.send("Wpisana została nieprawidłowa wartość", ephemeral=True)
     await ctx.defer()
+    channel_id = False
 
     if not channel_id:
-        messages = [i async for i in ctx.channel.history(limit=1000)]
+        messages = [i async for i in ctx.channel.history(limit=limit_of_msgs)]
         all_messages = " ".join([message.content for message in messages])
         all_messages = re.sub(r"[:/?!\.]", "", all_messages)
         pattern = r"\b[a-ząćęłńóśźż]{5,12}\b"
@@ -31,12 +34,13 @@ async def top_word(ctx, channel_id: str = ""):
         # --------------------------------------------------------------------------
         # plot
 
-        plt.figure(figsize=(10, 5))
+        plt.figure(figsize=(10, 6))
         plt.bar(most_common_words, most_common_counts, color="blue")
-        plt.ylabel("Krotność powtarzania")
-        plt.title("Top 15 używanych słów w ostatnim czasie")
-        plt.gca().set_yticks(range(0, max(most_common_counts) + 1, 5))
-        plt.xticks(rotation=45, ha="right")
+        plt.ylabel("Ilość powtórzeń")
+        # plt.xlabel("Słowa powyżej 4 znaków")
+        plt.title("Top 15 używanych słów powyżej 4 znaków ostatnio")
+        plt.yticks(range(0, max(most_common_counts) + 1, (max(most_common_counts) // 10) + 1))
+        plt.xticks(rotation=30, ha="right")
         plt.grid(axis="y", linestyle="--", alpha=0.7)
 
         my_temp_file = io.BytesIO()
