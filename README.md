@@ -11,4 +11,4 @@ The bot is implemented in Python using the discord.py library. The source code i
 # Contact
 If you have any questions or suggestions regarding this bot, please feel free to reach out via GitHub.
 
-![Discord](discord.png)
+![Discord](imgs/discord.png)
