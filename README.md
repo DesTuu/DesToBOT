@@ -22,3 +22,7 @@ Some data can be stored in a graph, sent as a temporary file io.BytesIO().
 The bot uses regex to detect suspicious links posted in public Discord channels.
 
 ![re](imgs/re.png)
+## from googletrans import Translator
+Learn english by reading short stories! 
+
+![translate](imgs/translate.png)
