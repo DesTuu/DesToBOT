@@ -3,14 +3,13 @@ import discord
 import settings
 from googletrans import Translator
 
-translator = Translator()
-
 
 @commands.hybrid_command(
     brief=f"{settings.PREFIX}say treśćwiadomości - przekazujesz wiadomość jako destobot",
 )
 async def translate(ctx: commands.Context, target_language: str = "polish", *, text: str) -> None:
     try:
+        translator = Translator()
         translated = translator.translate(text, dest=target_language)
         translated_text = translated.text
         source_language = translated.src
@@ -26,6 +25,7 @@ async def translate(ctx: commands.Context, target_language: str = "polish", *, t
         await ctx.send(embed=embed)
     except Exception as e:
         await ctx.send(f"Wystąpił błąd podczas tłumaczenia: {e}")
+
 
 async def setup(bot: commands.Bot):
     bot.add_command(translate)
