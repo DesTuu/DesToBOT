@@ -6,10 +6,10 @@ import settings
 import os
 import json
 
-excluded_words = {"bang", "bank", "banan", "band", "jeban", "skuban", "banal", "dzban", "turban",
-                  "banał", "baner", "bania", "banner", "kabanos", "szlaban", "taliban", "odban",
-                  "dban", "bani", "raban", "caliban", "vauban", "banie", "rozjeban", "porąban",
-                  "poraban", "wyraban", "wyrąban"}
+# excluded_words = {"bang", "bank", "banan", "band", "jeban", "skuban", "banal", "dzban", "turban",
+#                   "banał", "baner", "bania", "banner", "kabanos", "szlaban", "taliban", "odban",
+#                   "dban", "bani", "raban", "caliban", "vauban", "banie", "rozjeban", "porąban",
+#                   "poraban", "wyraban", "wyrąban"}
 
 
 class MyOnMessages(commands.Cog):
@@ -68,20 +68,20 @@ class MyOnMessages(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        if message.guild.id == 1056134342826528808 and not message.author.bot and message.author.id != 304001755912601610:
-            message_content = message.content.lower()
-
-            if "ban" in message_content:
-
-                if not any(word in message_content for word in excluded_words):
-                    current_time = datetime.now()
-                    last_time = self.last_ban_time[message.channel.id]
-
-                    if (current_time - last_time) >= self.cooldown_time:
-                        self.last_ban_time[message.channel.id] = current_time
-
-                        user_to_mention = 304001755912601610
-                        await message.channel.send(f"<@{user_to_mention}> ktoś napisał ban! 👺")
+        # if message.guild.id == 1056134342826528808 and not message.author.bot and message.author.id != 304001755912601610:
+        #     message_content = message.content.lower()
+        #
+        #     if "ban" in message_content:
+        #
+        #         if not any(word in message_content for word in excluded_words):
+        #             current_time = datetime.now()
+        #             last_time = self.last_ban_time[message.channel.id]
+        #
+        #             if (current_time - last_time) >= self.cooldown_time:
+        #                 self.last_ban_time[message.channel.id] = current_time
+        #
+        #                 user_to_mention = 304001755912601610
+        #                 await message.channel.send(f"<@{user_to_mention}> ktoś napisał ban! 👺")
 
         # -------------------------------------------------------------------------------------------------------------
         # kult
