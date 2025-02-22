@@ -23,7 +23,7 @@ async def users(ctx: commands.Context, role_id: str = "1296535472796995624", is_
     members_with_role = [member for member in ctx.guild.members if role in member.roles]
 
     if not members_with_role:
-        await ctx.send(f"Nikt nie ma roli: {role.name}", ephemeral=True)
+        await ctx.send(f"Nikt nie ma roli: {role.name}", ephemeral=is_private)
         return
 
     users_list = ", ".join([f"{member.mention}" for member in members_with_role])
