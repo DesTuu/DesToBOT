@@ -95,5 +95,3 @@ def auto_currencies():
         plt.close(fig)
 
         return currency_string, io_temp_file
-
-    return f"Error {response.status_code}"
