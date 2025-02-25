@@ -38,7 +38,7 @@ class MyOnMessages(commands.Cog):
         # -------------------------------------------------------------------------------------------------------------
         # find_players
 
-        self.find_players_channel_id = 1253761894750097519
+        # self.find_players_channel_id = 1253761894750097519
         # self.find_players_channel = self.bot.get_channel(self.find_players_channel_id)
 
     def load_points(self):
@@ -133,20 +133,20 @@ class MyOnMessages(commands.Cog):
         # -------------------------------------------------------------------------------------------------------------
         # find_players
 
-        if message.guild.id == 1056134342826528808 and message.channel.id == self.find_players_channel_id:
-            with open(settings.LAST_MSG_ID, "r") as f:
-                last_msg_id = f.read().strip()
-
-            channel = message.channel
-            last_message = await channel.fetch_message(int(last_msg_id))
-
-            await last_message.delete()
-
-            new_message = await channel.send("- **Spinguj rolę gry, wpisz np. @Warframe!** \n"
-                               "- **Następnie wejdź koniecznie od razu na kanał głosowy (możesz czekać zmutowany)!** \n")
-
-            with open(settings.LAST_MSG_ID, "w") as f:
-                f.write(str(new_message.id))
+        # if message.guild.id == 1056134342826528808 and message.channel.id == self.find_players_channel_id:
+        #     with open(settings.LAST_MSG_ID, "r") as f:
+        #         last_msg_id = f.read().strip()
+        #
+        #     channel = message.channel
+        #     last_message = await channel.fetch_message(int(last_msg_id))
+        #
+        #     await last_message.delete()
+        #
+        #     new_message = await channel.send("- **Spinguj rolę gry, wpisz np. @Warframe!** \n"
+        #                        "- **Następnie wejdź koniecznie od razu na kanał głosowy (możesz czekać zmutowany)!** \n")
+        #
+        #     with open(settings.LAST_MSG_ID, "w") as f:
+        #         f.write(str(new_message.id))
 
 
 async def setup(bot):
