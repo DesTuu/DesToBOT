@@ -22,7 +22,7 @@ class RegexUrlChecker(commands.Cog):
                 if url_regex:
                     # print("Wysłano link")
                     acceptable_pattern = (r"https?://(www\.)?"
-                                          r"(youtube\.com|youtu\.be|instagram\.com|facebook\.com|vm\.tiktok\.com|tiktok\.com|[a-z]*\.?discordapp\.(net|com)|tenor\.com)")
+                                          r"(youtube\.com|youtu\.be|instagram\.com|facebook\.com|vm\.tiktok\.com|tiktok\.com|imgur\.com|link\.chess\.com|[a-z]*\.?discordapp\.(net|com)|tenor\.com)")
                     acceptable_regex = re.search(acceptable_pattern, message.content)
 
                     if not acceptable_regex:
