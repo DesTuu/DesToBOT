@@ -37,7 +37,7 @@ def save_currency_data(gbp, eur, usd, date):
 def auto_currencies():
     url = 'https://www.waluty.pl/'
     response = requests.get(url)
-    if response.status_code == 200 or response.status_code == 500:
+    if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'lxml')
         currency_string = f"{str(soup.find('h2', class_='heading').text).strip()}\n"
         single_date = soup.find('h2', class_='heading').text.strip().split()[-1]
@@ -95,3 +95,6 @@ def auto_currencies():
         plt.close(fig)
 
         return currency_string, io_temp_file
+
+    else:
+        return f"response.status_code == {response.status_code}"
