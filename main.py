@@ -1,12 +1,14 @@
 import discord
 from discord.ext import commands, tasks
+from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
-import settings
-import task_loop_functions
-from db.my_token import DISCORD_TOKEN
+import os
 import random
 import asyncio
 import time
+
+import settings
+import task_loop_functions
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -105,4 +107,6 @@ if __name__ == "__main__":
         await bot.wait_until_ready()
 
 
+    load_dotenv()
+    DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
     bot.run(DISCORD_TOKEN, root_logger=True)
