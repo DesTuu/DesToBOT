@@ -31,18 +31,18 @@ class RegexUrlChecker(commands.Cog):
                         await url_logs_channel.send(f"<@&{discord_admin_role_id}>\n"
                                                     f"Na kanale {message.channel.name} {message.author.mention} ({message.author.name}) wysłał nietypowy dla mnie link:\n\n"
                                                     f"{message.content[:1800]}")
-                        bannable_pattern = r"https?://(www\.)?discord\.(gg|com)/\w+"
-                        bannable_regex = re.search(bannable_pattern, message.content)
+                        # bannable_pattern = r"https?://(www\.)?discord\.(gg|com)/\w+"
+                        # bannable_regex = re.search(bannable_pattern, message.content)
 
-                        if bannable_regex and "ssejEDNpJ7" not in message.content and "grappa-destiny" not in message.content and "9VDNv2jAcH" not in message.content:
-                            # print("Użytkownik został automatycznie zbanowany")
-                            await url_logs_channel.send(
-                                f"**Zbanowałem** {message.author.mention} **({message.author.name}) za wysłanie linku z zaproszeniem na inny discord:**\n\n"
-                                f"{message.content[:1800]}\n\n"
-                                f"Jeśli powyżej faktycznie znajduje się link z zaproszeniem na innego discorda to nie jest wymagana żadna dodatkowa akcja administracji!")
-                            await message.author.ban(reason="[AutoBan]: Wysłano link na innego Discorda",
-                                                     delete_message_days=7)
-                            await message.delete()
+                        # if bannable_regex and "channel" not in message.content and "ssejEDNpJ7" not in message.content and "grappa-destiny" not in message.content and "9VDNv2jAcH" not in message.content:
+                        #     # print("Użytkownik został automatycznie zbanowany")
+                        #     await url_logs_channel.send(
+                        #         f"**Zbanowałem** {message.author.mention} **({message.author.name}) za wysłanie linku z zaproszeniem na inny discord:**\n\n"
+                        #         f"{message.content[:1800]}\n\n"
+                        #         f"Jeśli powyżej faktycznie znajduje się link z zaproszeniem na innego discorda to nie jest wymagana żadna dodatkowa akcja administracji!")
+                        #     await message.author.ban(reason="[AutoBan]: Wysłano link na innego Discorda",
+                        #                              delete_message_days=7)
+                        #     await message.delete()
 
 
 async def setup(bot):
