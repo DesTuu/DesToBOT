@@ -28,8 +28,8 @@ class RegexUrlChecker(commands.Cog):
                     if not acceptable_regex:
                         url_logs_channel = self.bot.get_channel(1332562572129472564)
                         # print("Nieakceptowalny link, należy sprawdzić")
-                        await url_logs_channel.send(f"<@&{discord_admin_role_id}>\n"
-                                                    f"Na kanale {message.channel.name} {message.author.mention} ({message.author.name}) wysłał nietypowy dla mnie link:\n\n"
+                        # (f"<@&{discord_admin_role_id}>\n"
+                        await url_logs_channel.send(f"Na kanale {message.channel.name} {message.author.mention} ({message.author.name}) wysłał nietypowy dla mnie link:\n\n"
                                                     f"{message.content[:1800]}")
                         # bannable_pattern = r"https?://(www\.)?discord\.(gg|com)/\w+"
                         # bannable_regex = re.search(bannable_pattern, message.content)
