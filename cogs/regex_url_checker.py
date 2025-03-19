@@ -20,10 +20,16 @@ class RegexUrlChecker(commands.Cog):
                 url_regex = re.search(url_pattern, message.content)
 
                 if url_regex:
-                    # print("Wysłano link")
                     acceptable_pattern = (r"https?://(www\.)?"
-                                          r"(youtube\.com|youtu\.be|instagram\.com|facebook\.com|vm\.tiktok\.com|tiktok\.com|imgur\.com|link\.chess\.com|[a-z]*\.?discordapp\.(net|com)|tenor\.com)")
-                    acceptable_regex = re.search(acceptable_pattern, message.content)
+                                          r"(youtube\.com|youtu\.be|instagram\.com|facebook\.com|"
+                                          r"vm\.tiktok\.com|tiktok\.com|imgur\.com|"
+                                          r"link\.chess\.com|discord\.com/channels/|medal\.tv/|"
+                                          r"open\.spotify\.com/|outplayed\.tv/|"
+                                          r"media\d*\.giphy\.com/|media\d*\.tenor\.com/|"
+                                          r"draftlol\.dawe\.gg/|op\.gg/|steamcommunity\.com/|"
+                                          r"giphy\.com|tenor\.com|[a-z]*\.?discordapp\.(net|com)")
+
+                    acceptable_regex = re.search(acceptable_pattern, message.content, re.IGNORECASE)
 
                     if not acceptable_regex:
                         url_logs_channel = self.bot.get_channel(1332562572129472564)
