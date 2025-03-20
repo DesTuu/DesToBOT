@@ -4,7 +4,7 @@ import settings
 
 
 @commands.hybrid_command(
-    brief=f"{settings.PREFIX}channel_names - zmienia nazwy wszystkich kanałów",
+    brief=f"{settings.PREFIX}channel_names - zmienia nazwy wszystkich kanałów [DesTu only]",
 )
 async def channel_names(ctx: commands.Context, mode: int) -> None:
     if ctx.author.id == 354712325053218819:
