@@ -9,11 +9,11 @@ class SquadMembers(commands.Cog):
         self.message_id = 1347834429472505856
         self.bestie_id = 1310041042728517662
         self.homie_id = 1310038363805319238
-        self.buddy_id = 1306920660680970250
+        # self.buddy_id = 1306920660680970250
 
         self.mention_bestie = "<@&1310041042728517662>"
         self.mention_homie = "<@&1310038363805319238>"
-        self.mention_buddy = "<@&1306920660680970250>"
+        # self.mention_buddy = "<@&1306920660680970250>"
     def mention_user(self, id: int) -> str:
         return f"<@!{id}>"
 
@@ -60,7 +60,7 @@ class SquadMembers(commands.Cog):
 
         besties = self.get_users_with_role(after.guild, self.bestie_id)
         homies = self.get_users_with_role(after.guild, self.homie_id)
-        buddies = self.get_users_with_role(after.guild, self.buddy_id)
+        # buddies = self.get_users_with_role(after.guild, self.buddy_id)
 
         string_to_send += f"## {self.mention_bestie}\n"
         if besties:
@@ -76,12 +76,12 @@ class SquadMembers(commands.Cog):
         else:
             string_to_send += "- <brak>\n"
 
-        string_to_send += f"## {self.mention_buddy}\n"
-        if buddies:
-            for buddy in buddies:
-                string_to_send += f"- {self.mention_user(buddy)}\n"
-        else:
-            string_to_send += "- <brak>\n"
+        # string_to_send += f"## {self.mention_buddy}\n"
+        # if buddies:
+        #     for buddy in buddies:
+        #         string_to_send += f"- {self.mention_user(buddy)}\n"
+        # else:
+        #     string_to_send += "- <brak>\n"
 
         await message.edit(content=string_to_send)
 
