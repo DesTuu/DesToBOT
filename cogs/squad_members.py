@@ -34,7 +34,7 @@ class SquadMembers(commands.Cog):
         if before.roles == after.roles:
             return
 
-        target_roles = [self.bestie_id, self.homie_id, self.buddy_id]
+        target_roles = [self.bestie_id, self.homie_id] #self.buddy_id
         after_role_ids = [role.id for role in after.roles]
 
         if not any(role_id in after_role_ids for role_id in target_roles):
