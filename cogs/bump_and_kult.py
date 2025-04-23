@@ -109,8 +109,12 @@ class MyOnMessages(commands.Cog):
 
                     bumper_data = self.load_bumper()
 
-                    if user_id in bumper_data:
-                        bumper_data[user_id] += 1
+                    if bumper_data:
+                        if user_id in bumper_data:
+                            bumper_data[user_id] += 1
+                        else:
+                            bumper_data = dict()
+                            bumper_data[user_id] = 1
                     else:
                         bumper_data = dict()
                         bumper_data[user_id] = 1
