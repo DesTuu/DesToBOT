@@ -55,9 +55,15 @@ class InviteTracker(commands.Cog):
 
         channel = guild.get_channel(TARGET_CHANNEL_ID)
         if inviter and channel:
-            await channel.send(f"{member.mention} was invited by {inviter.mention} using invite `{used_invite.code}`. +")
+            await channel.send(
+                f"{member.mention} was invited by {inviter.mention} using invite `{used_invite.code}`. +",
+                allowed_mentions=discord.AllowedMentions.none()
+            )
         elif channel:
-            await channel.send(f"{member.mention} joined, but inviter could not be determined. ?")
+            await channel.send(
+                f"{member.mention} joined, but inviter could not be determined. ?",
+                allowed_mentions=discord.AllowedMentions.none()
+            )
 
     @commands.Cog.listener()
     async def on_invite_create(self, invite):
