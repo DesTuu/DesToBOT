@@ -7,10 +7,12 @@ class SquadMembers(commands.Cog):
         self.bot = bot
         self.channel_id = 1269975070625763378
         self.message_id = 1347834429472505856
+        self.legends_id = 1351135683846344726
         self.bestie_id = 1310041042728517662
         self.homie_id = 1310038363805319238
         # self.buddy_id = 1306920660680970250
 
+        self.mention_legends = "<@&1351135683846344726>"
         self.mention_bestie = "<@&1310041042728517662>"
         self.mention_homie = "<@&1310038363805319238>"
         # self.mention_buddy = "<@&1306920660680970250>"
@@ -58,9 +60,17 @@ class SquadMembers(commands.Cog):
             print("❌ Błąd pobierania wiadomości!")
             return
 
+        legends = self.get_users_with_role(after.guild, self.legends_id)
         besties = self.get_users_with_role(after.guild, self.bestie_id)
         homies = self.get_users_with_role(after.guild, self.homie_id)
         # buddies = self.get_users_with_role(after.guild, self.buddy_id)
+
+        string_to_send += f"## {self.mention_legends}\n"
+        if legends:
+            for legend in legends:
+                string_to_send += f"- {self.mention_user(legend)}\n"
+        else:
+            string_to_send += "- <brak>\n"
 
         string_to_send += f"## {self.mention_bestie}\n"
         if besties:
@@ -83,6 +93,7 @@ class SquadMembers(commands.Cog):
         # else:
         #     string_to_send += "- <brak>\n"
 
+        string_to_send = string_to_send[:2000]
         await message.edit(content=string_to_send)
 
 async def setup(bot):
