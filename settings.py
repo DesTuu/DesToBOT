@@ -15,7 +15,7 @@ activities = [
     discord.Activity(name='!help', type=discord.ActivityType.competing)
 ]
 
-PREFIX = "/"
+PREFIX = "$"
 
 HEARTBEAT_TIMEOUT = 60
 
