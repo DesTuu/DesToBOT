@@ -7,7 +7,7 @@ TARGET_GUILD_ID = 1056134342826528808
 TARGET_CHANNEL_ID = 1281898784741261456
 MODERATOR_ID = 1075805857314521118
 
-class AutoUnbanCog(commands.Cog):
+class AutoUnban(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -46,4 +46,4 @@ class AutoUnbanCog(commands.Cog):
                             await log_channel.send(embed=embed)
 
 async def setup(bot):
-    await bot.add_cog(AutoUnbanCog(bot))
+    await bot.add_cog(AutoUnban(bot))
