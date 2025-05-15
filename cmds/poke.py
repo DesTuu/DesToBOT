@@ -7,7 +7,7 @@ import requests
 
 
 @commands.hybrid_command(
-    brief=f"{settings.PREFIX}hug nickogólnydiscorda - zaczepiasz wybranego użytkownika gifem"
+    brief=f"{settings.PREFIX}poke nickogólnydiscorda - zaczepiasz wybranego użytkownika gifem"
 )
 async def poke(ctx: commands.Context, user: discord.Member) -> None:
     embed = discord.Embed(
