@@ -9,13 +9,10 @@ class SquadMembers(commands.Cog):
         self.message_id = 1347834429472505856
         self.legends_id = 1351135683846344726
         self.bestie_id = 1310041042728517662
-        self.homie_id = 1310038363805319238
-        # self.buddy_id = 1306920660680970250
 
         self.mention_legends = "<@&1351135683846344726>"
         self.mention_bestie = "<@&1310041042728517662>"
-        self.mention_homie = "<@&1310038363805319238>"
-        # self.mention_buddy = "<@&1306920660680970250>"
+
     def mention_user(self, id: int) -> str:
         return f"<@!{id}>"
 
@@ -36,20 +33,20 @@ class SquadMembers(commands.Cog):
         if before.roles == after.roles:
             return
 
-        target_roles = [self.bestie_id, self.homie_id] #self.buddy_id
+        target_roles = [self.bestie_id, self.legends_id]
         after_role_ids = [role.id for role in after.roles]
 
         if not any(role_id in after_role_ids for role_id in target_roles):
             return
 
-        string_to_send = "# Skład Ekipy\n"
+        string_to_send = "# Najaktywniejsi Użytkownicy Serwera\n"
 
         channel = after.guild.get_channel(self.channel_id)
         if not channel:
             return
 
         try:
-            message = await channel.fetch_message(self.message_id)  # Pobranie wiadomości
+            message = await channel.fetch_message(self.message_id)
         except discord.NotFound:
             print(f"❌ Nie znaleziono wiadomości o ID {self.message_id}")
             return
@@ -62,8 +59,6 @@ class SquadMembers(commands.Cog):
 
         legends = self.get_users_with_role(after.guild, self.legends_id)
         besties = self.get_users_with_role(after.guild, self.bestie_id)
-        homies = self.get_users_with_role(after.guild, self.homie_id)
-        # buddies = self.get_users_with_role(after.guild, self.buddy_id)
 
         string_to_send += f"## {self.mention_legends}\n"
         if legends:
@@ -75,26 +70,14 @@ class SquadMembers(commands.Cog):
         string_to_send += f"## {self.mention_bestie}\n"
         if besties:
             for bestie in besties:
-                string_to_send += f"- {self.mention_user(bestie)}\n"
+                if self.mention_user(bestie) not in string_to_send:
+                    string_to_send += f"- {self.mention_user(bestie)}\n"
         else:
             string_to_send += "- <brak>\n"
-
-        string_to_send += f"## {self.mention_homie}\n"
-        if homies:
-            for homie in homies:
-                string_to_send += f"- {self.mention_user(homie)}\n"
-        else:
-            string_to_send += "- <brak>\n"
-
-        # string_to_send += f"## {self.mention_buddy}\n"
-        # if buddies:
-        #     for buddy in buddies:
-        #         string_to_send += f"- {self.mention_user(buddy)}\n"
-        # else:
-        #     string_to_send += "- <brak>\n"
 
         string_to_send = string_to_send[:2000]
         await message.edit(content=string_to_send)
+
 
 async def setup(bot):
     await bot.add_cog(SquadMembers(bot))
