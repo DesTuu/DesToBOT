@@ -30,7 +30,7 @@ class AutoUnban(commands.Cog):
                 if "Dyno Autoban" in reason:
                     if datetime.now(timezone.utc) - user.created_at > timedelta(days=7):
                         await asyncio.sleep(20)
-                        await guild.unban(user, reason="Autounban Rule `Konto na Discordzie dłużej niż 2 tygodnie`")
+                        await guild.unban(user, reason="Autounban Rule `Konto na Discordzie dłużej niż 7 dni`")
 
                         log_channel = self.bot.get_channel(TARGET_CHANNEL_ID)
                         if log_channel:
