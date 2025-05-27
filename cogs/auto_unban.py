@@ -41,7 +41,7 @@ class AutoUnban(commands.Cog):
                             )
                             embed.add_field(name="User", value=f"<@{user.id}>", inline=True)
                             embed.add_field(name="Moderator", value=f"<@!{MODERATOR_ID}>", inline=True)
-                            embed.add_field(name="Reason", value="Autounban Rule `Konto na Discordzie dłużej niż 2 tygodnie`", inline=True)
+                            embed.add_field(name="Reason", value="Autounban Rule `Konto na Discordzie dłużej niż 7 dni`", inline=True)
                             embed.set_footer(text=f"ID: {user.id}")
                             await log_channel.send(embed=embed)
 
