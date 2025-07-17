@@ -40,6 +40,8 @@ LAST_BUMPER_FILE = DB_DIR / "last_bumper.json"
 
 LAST_MSG_ID = DB_DIR / "last_msg_id.txt"
 
+ECO_POINTS_FILE = DB_DIR / "eco_points.json"
+
 def get_guild_names(bot):
     for i in bot.guilds:
         yield i.name
