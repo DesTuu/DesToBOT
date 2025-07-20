@@ -94,7 +94,7 @@ class Economy(commands.Cog):
                     self.eco_points[str(bump_user_id)] = self.eco_points.get(str(bump_user_id), 0) + bump_eco_points
                     self.save_eco_points()
                     await self.command_channel.send(
-                        f"- **{bump_user_fetch.display_name}** otrzymuje **+{bump_eco_points}** za bumpowanie Naszego serwera na kanale {message.channel.mention}! `/top_cash /shop`")
+                        f"- **{bump_user_fetch.display_name}** otrzymuje **+{bump_eco_points}$** za bumpowanie Naszego serwera na kanale {message.channel.mention}! `/top_cash /shop`")
 
             # Eco Inviter
 
