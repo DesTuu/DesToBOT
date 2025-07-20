@@ -48,7 +48,7 @@ class Economy(commands.Cog):
                         self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 10
                         self.save_eco_points()
                         await self.command_channel.send(
-                            f"- {message.author.display_name} otrzymuje **+10$** za przywitanie nowego ostatniego użytkownika na kanale {message.channel.mention}! `/top_cash /shop`")
+                            f"- **{message.author.display_name}** otrzymuje **+10$** za przywitanie nowego ostatniego użytkownika na kanale {message.channel.mention}! `/top_cash /shop`")
 
                         self.user_mention = ""
 
@@ -62,7 +62,7 @@ class Economy(commands.Cog):
                         self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 2
                         self.save_eco_points()
                         await self.command_channel.send(
-                            f"- {message.author.display_name} otrzymuje **+2$** za wysłanie obrazu/filmiku na kanale {message.channel.mention}! `/top_cash /shop`")
+                            f"- **{message.author.display_name}** otrzymuje **+2$** za wysłanie obrazu/filmiku na kanale {message.channel.mention}! `/top_cash /shop`")
 
                 #     # Optional: also check for direct links in the message content
                 # if any(ext in message.content.lower() for ext in [".jpg", ".jpeg", ".png", ".mp4", ".mov", ".webm"]):
@@ -94,8 +94,24 @@ class Economy(commands.Cog):
                     self.eco_points[str(bump_user_id)] = self.eco_points.get(str(bump_user_id), 0) + bump_eco_points
                     self.save_eco_points()
                     await self.command_channel.send(
-                        f"- {bump_user_fetch.display_name} otrzymuje **+{bump_eco_points}** za bumpowanie Naszego serwera na kanale {message.channel.mention}! `/top_cash /shop`")
+                        f"- **{bump_user_fetch.display_name}** otrzymuje **+{bump_eco_points}** za bumpowanie Naszego serwera na kanale {message.channel.mention}! `/top_cash /shop`")
 
+            # Eco Inviter
+
+            if message.channel.id == 1164393186626654218:
+                if "was invited" in message.content:
+                    splitted_inv_msg = message.content.split(" ")
+                    inv_user_id = splitted_inv_msg[4]
+                    inv_user_id = inv_user_id.replace("<", "")
+                    inv_user_id = inv_user_id.replace(">", "")
+                    inv_user_id = inv_user_id.replace("@", "")
+                    inv_user_id = inv_user_id.replace("!", "")
+                    if int(inv_user_id) != int(302050872383242240):
+                        inv_user_fetch = message.guild.get_member(int(inv_user_id))
+                        self.eco_points[str(inv_user_id)] = self.eco_points.get(str(inv_user_id), 0) + 20
+                        self.save_eco_points()
+                        await self.command_channel.send(
+                            f"- **{inv_user_fetch.display_name}** otrzymuje **+20$** za pomyślne zaproszenie użytkownika na Nasz serwer! `/top_cash /shop`")
 
 async def setup(bot):
     await bot.add_cog(Economy(bot))
