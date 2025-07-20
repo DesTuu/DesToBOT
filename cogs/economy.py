@@ -59,10 +59,10 @@ class Economy(commands.Cog):
             1361938010194837587, 1369658691158147152, 1206914818347503646, 1313750634121658429):
                 for attachment in message.attachments:
                     if attachment.filename.lower().endswith((".jpg", ".jpeg", ".png", ".mp4", ".mov", ".webm")):
-                        self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 2
+                        self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 3
                         self.save_eco_points()
                         await self.command_channel.send(
-                            f"- **{message.author.display_name}** otrzymuje **+2$** za wysłanie obrazu/filmiku na kanale {message.channel.mention}! `/top_cash /shop`")
+                            f"- **{message.author.display_name}** otrzymuje **+3$** za wysłanie obrazu/filmiku na kanale {message.channel.mention}! `/top_cash /shop`")
 
                 #     # Optional: also check for direct links in the message content
                 # if any(ext in message.content.lower() for ext in [".jpg", ".jpeg", ".png", ".mp4", ".mov", ".webm"]):
