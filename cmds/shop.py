@@ -6,9 +6,9 @@ import os
 import asyncio
 
 options_to_buy = (
-    "Grappa Premium (1 month) - 10000$",
-    "Custom Rank (1 month) - 10000$",
-    "Custom Channel (1 month) - 10000$"
+    "Grappa Premium (1 month) - 2000$",
+    "Custom Rank (1 month) - 2000$",
+    "Custom Channel (1 month) - 2000$"
 )
 
 
