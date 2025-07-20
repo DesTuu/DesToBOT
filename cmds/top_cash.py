@@ -31,7 +31,9 @@ async def top_cash(ctx: commands.Context, is_private: bool = True) -> None:
             mention = f"<@{user_id}>"
             description += f"{idx}. {mention} - {points}$\n"
 
-            top_embed.description = description
+        top_embed.description = description
+        user_points = eco_points.get(str(ctx.author.id), 0)
+        top_embed.set_footer(text=f"Posiadasz {user_points}$")
 
         await ctx.send(embed=top_embed, ephemeral=is_private)
     else:

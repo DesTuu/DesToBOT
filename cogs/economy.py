@@ -84,9 +84,10 @@ class Economy(commands.Cog):
                     bump_user_id = bump_user_id.replace(">", "")
                     bump_user_id = bump_user_id.replace("@", "")
                     bump_user_id = bump_user_id.replace("!", "")
-                    bump_user_fetch = await message.guild.get_member(int(bump_user_id))
+                    bump_user_fetch = message.guild.get_member(int(bump_user_id))
                     bump_times = splitted_bump_msg[6]
                     bump_times = bump_times.replace("+", "")
+                    bump_times = bump_times.replace("*", "")
                     bump_times = int(bump_times.replace("!", ""))
                     bump_times /= 5
                     bump_eco_points = int(10 * (1 + bump_times))

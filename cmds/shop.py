@@ -6,9 +6,15 @@ import os
 import asyncio
 
 options_to_buy = (
-    "Grappa Premium (1 month) - 2000$",
-    "Custom Rank (1 month) - 2000$",
-    "Custom Channel (1 month) - 2000$"
+    "### Swoja Własna Gradientowa Ranga (7 dni) - 1000$",
+    "### Swój Własny Kanał (7 dni) - 1000$",
+    "### Ranga Grappa Premium (7 dni) - 1250$",
+    "### Swoja Własna Gradientowa Ranga (1 miesiąc) - 2500$",
+    "### Swój Własny Kanał (1 miesiąc) - 2500$",
+    "### Ranga Grappa Premium (1 miesiąc) - 3000$",
+    "### Swoja Własna Gradientowa Ranga (3 miesiące) - 5000$",
+    "### Swój Własny Kanał (3 miesiące) - 5000$",
+    "### Ranga Grappa Premium (3 miesiące) - 6000$",
 )
 
 
@@ -26,7 +32,7 @@ def save_eco_points(eco_points):
 
 class ShopView(discord.ui.View):
     def __init__(self, user_points: int, user_id: int):
-        super().__init__(timeout=120)  # 2 minutes timeout
+        super().__init__(timeout=120)
         self.user_points = user_points
         self.user_id = user_id
         self.select_menu = None
@@ -41,10 +47,10 @@ class ShopView(discord.ui.View):
     @discord.ui.button(label="Buy", style=discord.ButtonStyle.green)
     async def buy_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if interaction.user.id != self.user_id:
-            await interaction.response.send_message("This isn't your shop session.", ephemeral=True)
+            await interaction.response.send_message("Musisz wpisać komendę /shop aby użyć swoich pieniędzy!", ephemeral=True)
             return
 
-        self.clear_items()  # Remove the Buy button after clicking
+        self.clear_items()
 
         # Create select menu from options
         select = discord.ui.Select(
@@ -70,14 +76,14 @@ class ShopView(discord.ui.View):
                 eco_points[str(self.user_id)] = self.user_points
                 save_eco_points(eco_points)
                 await log_channel.send(
-                    f"✅ Accepted Payment — User: <@{self.user_id}> bought **{selected_label}** for {price}$")
-                await interaction_select.response.send_message(f"You bought **{selected_label}** for {price}$ ✅",
+                    f"✅ Payment Accepted — User: <@{self.user_id}> bought **{selected_label}** for {price}$")
+                await interaction_select.response.send_message(f"Kupiłeś **{selected_label}** za {price}$ ✅",
                                                                ephemeral=True)
             else:
                 await log_channel.send(
                     f"❌ Payment Denied — User: <@{self.user_id}> tried to buy **{selected_label}** but had only {self.user_points}$")
                 await interaction_select.response.send_message(
-                    f"You don't have enough money to buy **{selected_label}** ❌", ephemeral=True)
+                    f"Nie masz wystarczająco pieniędzy by kupić **{selected_label}** ❌", ephemeral=True)
 
             # Disable further interaction
             for child in self.children:
@@ -106,7 +112,7 @@ async def shop(ctx: commands.Context, is_private: bool = True) -> None:
 
     shop_embed = discord.Embed(title="$ Sklep $", color=discord.Color.blue())
     shop_embed.description = description
-    shop_embed.set_footer(text="You have {}$".format(user_points))
+    shop_embed.set_footer(text=f"Posiadasz {user_points}$")
 
     view = ShopView(user_points, ctx.author.id)
     view.message = await ctx.send(embed=shop_embed, view=view, ephemeral=is_private)
