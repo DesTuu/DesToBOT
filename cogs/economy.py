@@ -55,8 +55,9 @@ class Economy(commands.Cog):
             # Eco File
 
             if message.channel.id in (
-            1249465490439671899, 1349710032656142387, 1269979219451187242, 1269978371543007362, 1276875368497680475,
-            1361938010194837587, 1369658691158147152, 1206914818347503646, 1313750634121658429):
+                    1249465490439671899, 1349710032656142387, 1269979219451187242, 1269978371543007362,
+                    1276875368497680475,
+                    1361938010194837587, 1369658691158147152, 1206914818347503646, 1313750634121658429):
                 for attachment in message.attachments:
                     if attachment.filename.lower().endswith((".jpg", ".jpeg", ".png", ".mp4", ".mov", ".webm")):
                         self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 3
@@ -64,13 +65,6 @@ class Economy(commands.Cog):
                         await self.command_channel.send(
                             f"- **{message.author.display_name}** otrzymuje **+3$** za wysłanie obrazu/filmiku na kanale {message.channel.mention}! `/top_cash /shop`")
 
-                #     # Optional: also check for direct links in the message content
-                # if any(ext in message.content.lower() for ext in [".jpg", ".jpeg", ".png", ".mp4", ".mov", ".webm"]):
-                #     print("3")
-                #     await self.command_channel.send("Detected a media link in the message content.")
-                #     return
-
-                # await bot.process_commands(message)
 
         elif message.author == self.bot.user:
 
@@ -112,6 +106,7 @@ class Economy(commands.Cog):
                         self.save_eco_points()
                         await self.command_channel.send(
                             f"- **{inv_user_fetch.display_name}** otrzymuje **+20$** za pomyślne zaproszenie użytkownika na Nasz serwer! `/top_cash /shop`")
+
 
 async def setup(bot):
     await bot.add_cog(Economy(bot))
