@@ -29,7 +29,7 @@ async def top_cash(ctx: commands.Context, is_private: bool = True) -> None:
         top_embed = discord.Embed(title="Top 10 Bogaczy", color=discord.Color.blue())
         for idx, (user_id, points) in enumerate(eco_top_users, start=1):
             mention = f"<@{user_id}>"
-            description += f"{idx}. {mention} - {points}$ dolarów\n"
+            description += f"{idx}. {mention} - {points}$\n"
 
             top_embed.description = description
 
