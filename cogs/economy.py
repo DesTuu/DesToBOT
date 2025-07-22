@@ -41,13 +41,13 @@ class Economy(commands.Cog):
                 # Eco Messages
 
                 self.message_counter[message.author.id] = self.message_counter.get(message.author.id, 0) + 1
-                if self.message_counter[message.author.id] >= 50:
-                    self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 10
+                if self.message_counter[message.author.id] >= 20:
+                    self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 5
                     self.message_counter[message.author.id] = 0
                     self.save_eco_points()
                     await self.command_channel.send(
-                        f"- **{message.author.display_name}** otrzymuje **+10$** za napisanie 50 wiadomości na kanale {message.channel.mention}! `/top_cash /shop`")
-                    
+                        f"- **{message.author.display_name}** otrzymuje **+5$** za napisanie 20 wiadomości na kanale {message.channel.mention}! `/top_cash /shop`")
+
 
                 # Eco Welcome
 
@@ -143,7 +143,7 @@ class Economy(commands.Cog):
                             time_spent_in_minutes / 10)
                         self.save_eco_points()
                         await self.command_channel.send(
-                            f"- **{member.display_name}** otrzymuje **+{int(time_spent_in_minutes / 5)}$** za przebywanie na Naszych kanałach głosowych! `/top_cash /shop`")
+                            f"- **{member.display_name}** otrzymuje **+{int(time_spent_in_minutes / 10)}$** za przebywanie na Naszych kanałach głosowych! `/top_cash /shop`")
 
 
 async def setup(bot):
