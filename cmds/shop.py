@@ -6,15 +6,15 @@ import os
 import asyncio
 
 options_to_buy = (
-    "### Swoja Własna Gradientowa Ranga (7 dni) - 500$",
-    "### Swój Własny Kanał (7 dni) - 500$",
-    "### Ranga Grappa Premium (7 dni) - 600$",
+    "### Swoja Własna Gradientowa Ranga (7 dni) - 700$",
+    "### Swój Własny Kanał (7 dni) - 700$",
+    "### Ranga Grappa Premium (7 dni) - 700$",
     "### Swoja Własna Gradientowa Ranga (1 miesiąc) - 1500$",
     "### Swój Własny Kanał (1 miesiąc) - 1500$",
-    "### Ranga Grappa Premium (1 miesiąc) - 1800$",
+    "### Ranga Grappa Premium (1 miesiąc) - 1500$",
     "### Swoja Własna Gradientowa Ranga (3 miesiące) - 3000$",
     "### Swój Własny Kanał (3 miesiące) - 3000$",
-    "### Ranga Grappa Premium (3 miesiące) - 3600$",
+    "### Ranga Grappa Premium (3 miesiące) - 3000$",
 )
 
 

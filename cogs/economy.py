@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-from dotenv import set_key
-
 import settings
 import json
 import os
@@ -12,7 +10,7 @@ class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.general_channel = self.bot.get_channel(1056276694140452964)
-        self.command_channel = self.bot.get_channel(1283802007823581197)
+        self.eco_log_channel = self.bot.get_channel(1397620937469464707)
         self.user_mention = ""
         self.eco_points = self.load_eco_points()
         self.hi_words = ("cześć", "czesc", "witam", "dobry", "siem", "witma",
@@ -34,19 +32,19 @@ class Economy(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:
-        if not message.author.bot:
+        if message.author != self.bot.user:
 
             if message.channel.id == 1056276694140452964:
 
                 # Eco Messages
 
-                self.message_counter[message.author.id] = self.message_counter.get(message.author.id, 0) + 1
-                if self.message_counter[message.author.id] >= 20:
-                    self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 5
-                    self.message_counter[message.author.id] = 0
-                    self.save_eco_points()
-                    await self.command_channel.send(
-                        f"- **{message.author.display_name}** otrzymuje **+5$** za napisanie 20 wiadomości na kanale {message.channel.mention}! `/top_cash /shop`")
+                # self.message_counter[message.author.id] = self.message_counter.get(message.author.id, 0) + 1
+                # if self.message_counter[message.author.id] >= 30:
+                #     self.message_counter[message.author.id] = 0
+                #     self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 5
+                #     self.save_eco_points()
+                #     await self.eco_log_channel.send(
+                #         f"- **{message.author.display_name}** otrzymuje **+5$** za napisanie 30 wiadomości na kanale {message.channel.mention}! `/top_cash /shop`")
 
 
                 # Eco Welcome
@@ -64,7 +62,7 @@ class Economy(commands.Cog):
                             word in message.content.lower() for word in self.hi_words):
                         self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 10
                         self.save_eco_points()
-                        await self.command_channel.send(
+                        await self.eco_log_channel.send(
                             f"- **{message.author.display_name}** otrzymuje **+10$** za przywitanie nowego ostatniego użytkownika na kanale {message.channel.mention}! `/top_cash /shop`")
 
                         self.user_mention = ""
@@ -79,7 +77,7 @@ class Economy(commands.Cog):
                     if attachment.filename.lower().endswith((".jpg", ".jpeg", ".png", ".mp4", ".mov", ".webm")):
                         self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 3
                         self.save_eco_points()
-                        await self.command_channel.send(
+                        await self.eco_log_channel.send(
                             f"- **{message.author.display_name}** otrzymuje **+3$** za wysłanie obrazu/filmiku na kanale {message.channel.mention}! `/top_cash /shop`")
 
 
@@ -104,7 +102,7 @@ class Economy(commands.Cog):
                     bump_eco_points = int(10 * (1 + bump_times))
                     self.eco_points[str(bump_user_id)] = self.eco_points.get(str(bump_user_id), 0) + bump_eco_points
                     self.save_eco_points()
-                    await self.command_channel.send(
+                    await self.eco_log_channel.send(
                         f"- **{bump_user_fetch.display_name}** otrzymuje **+{bump_eco_points}$** za bumpowanie Naszego serwera na kanale {message.channel.mention}! `/top_cash /shop`")
 
             # Eco Inviter
@@ -121,7 +119,7 @@ class Economy(commands.Cog):
                         inv_user_fetch = message.guild.get_member(int(inv_user_id))
                         self.eco_points[str(inv_user_id)] = self.eco_points.get(str(inv_user_id), 0) + 20
                         self.save_eco_points()
-                        await self.command_channel.send(
+                        await self.eco_log_channel.send(
                             f"- **{inv_user_fetch.display_name}** otrzymuje **+20$** za pomyślne zaproszenie użytkownika na Nasz serwer! `/top_cash /shop`")
 
     # Eco Voice
@@ -138,12 +136,12 @@ class Economy(commands.Cog):
                 join_time = self.voice_join_times.pop(member.id, None)
                 if join_time:
                     time_spent_in_minutes = int((datetime.now(UTC) - join_time).total_seconds() / 60)
-                    if time_spent_in_minutes >= 30:
+                    if time_spent_in_minutes >= 60:
                         self.eco_points[str(member.id)] = self.eco_points.get(str(member.id), 0) + int(
-                            time_spent_in_minutes / 10)
+                            time_spent_in_minutes / 12)
                         self.save_eco_points()
-                        await self.command_channel.send(
-                            f"- **{member.display_name}** otrzymuje **+{int(time_spent_in_minutes / 10)}$** za przebywanie na Naszych kanałach głosowych! `/top_cash /shop`")
+                        await self.eco_log_channel.send(
+                            f"- **{member.display_name}** otrzymuje **+{int(time_spent_in_minutes / 15)}$** za przebywanie na Naszych kanałach głosowych! `/top_cash /shop`")
 
 
 async def setup(bot):
