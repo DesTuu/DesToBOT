@@ -63,7 +63,7 @@ class Economy(commands.Cog):
                         self.eco_points[str(message.author.id)] = self.eco_points.get(str(message.author.id), 0) + 10
                         self.save_eco_points()
                         await self.eco_log_channel.send(
-                            f"- **{message.author.display_name}** otrzymuje **+10$** za przywitanie nowego ostatniego użytkownika na kanale {message.channel.mention}! `/top_cash /shop`")
+                            f"- **{message.author.display_name}** otrzymuje **+12$** za przywitanie nowego ostatniego użytkownika na kanale {message.channel.mention}! `/top_cash /shop`")
 
                         self.user_mention = ""
 
@@ -98,7 +98,7 @@ class Economy(commands.Cog):
                     bump_times = bump_times.replace("+", "")
                     bump_times = bump_times.replace("*", "")
                     bump_times = int(bump_times.replace("!", ""))
-                    bump_times /= 5
+                    bump_times /= 2
                     bump_eco_points = int(10 * (1 + bump_times))
                     self.eco_points[str(bump_user_id)] = self.eco_points.get(str(bump_user_id), 0) + bump_eco_points
                     self.save_eco_points()
@@ -120,7 +120,7 @@ class Economy(commands.Cog):
                         self.eco_points[str(inv_user_id)] = self.eco_points.get(str(inv_user_id), 0) + 20
                         self.save_eco_points()
                         await self.eco_log_channel.send(
-                            f"- **{inv_user_fetch.display_name}** otrzymuje **+20$** za pomyślne zaproszenie użytkownika na Nasz serwer! `/top_cash /shop`")
+                            f"- **{inv_user_fetch.display_name}** otrzymuje **+25$** za pomyślne zaproszenie użytkownika na Nasz serwer! `/top_cash /shop`")
 
     # Eco Voice
 
@@ -138,7 +138,7 @@ class Economy(commands.Cog):
                     time_spent_in_minutes = int((datetime.now(UTC) - join_time).total_seconds() / 60)
                     if time_spent_in_minutes >= 60:
                         self.eco_points[str(member.id)] = self.eco_points.get(str(member.id), 0) + int(
-                            time_spent_in_minutes / 12)
+                            time_spent_in_minutes / 10)
                         self.save_eco_points()
                         await self.eco_log_channel.send(
                             f"- **{member.display_name}** otrzymuje **+{int(time_spent_in_minutes / 15)}$** za przebywanie na Naszych kanałach głosowych! `/top_cash /shop`")

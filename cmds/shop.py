@@ -1,20 +1,26 @@
+from random import randint
+
 from discord.ext import commands
 import discord
 import settings
 import json
 import os
-import asyncio
+import random
 
 options_to_buy = (
-    "### Swoja Własna Gradientowa Ranga (7 dni) - 700$",
-    "### Swój Własny Kanał (7 dni) - 700$",
-    "### Ranga Grappa Premium (7 dni) - 700$",
-    "### Swoja Własna Gradientowa Ranga (1 miesiąc) - 1500$",
-    "### Swój Własny Kanał (1 miesiąc) - 1500$",
-    "### Ranga Grappa Premium (1 miesiąc) - 1500$",
-    "### Swoja Własna Gradientowa Ranga (3 miesiące) - 3000$",
-    "### Swój Własny Kanał (3 miesiące) - 3000$",
-    "### Ranga Grappa Premium (3 miesiące) - 3000$",
+    "- Czarna Skrzynka - 300$",
+    "- Swoja Własna Gradientowa Ranga (7 dni) - 1000$",
+    "- Swój Własny Kanał (7 dni) - 1000$",
+    "- Ranga Grappa Premium (7 dni) - 1000$",
+    "- Swoja Własna Gradientowa Ranga (1 miesiąc) - 2000$",
+    "- Swój Własny Kanał (1 miesiąc) - 2000$",
+    "- Ranga Grappa Premium (1 miesiąc) - 2000$",
+    "- Swoja Własna Gradientowa Ranga (3 miesiące) - 3000$",
+    "- Swój Własny Kanał (3 miesiące) - 3000$",
+    "- Ranga Grappa Premium (3 miesiące) - 3000$",
+    "- Swoja Własna Gradientowa Ranga (1 rok) - 6000$",
+    "- Swój Własny Kanał (1 rok) - 6000$",
+    "- Ranga Grappa Premium (1 rok) - 6000$",
 )
 
 
@@ -75,10 +81,49 @@ class ShopView(discord.ui.View):
                 eco_points = eco_load_points()
                 eco_points[str(self.user_id)] = self.user_points
                 save_eco_points(eco_points)
-                await log_channel.send(
-                    f"✅ Payment Accepted — User: <@{self.user_id}> bought **{selected_label}** for {price}$")
-                await interaction_select.response.send_message(f"Kupiłeś **{selected_label}** za {price}$ ✅",
-                                                               ephemeral=True)
+                if price != 200:
+                    await log_channel.send(
+                        f"✅ Payment Accepted — User: <@{self.user_id}> bought **{selected_label}** for {price}$")
+                    await interaction_select.response.send_message(f"Kupiono **{selected_label}** za {price}$ ✅",
+                                                                   ephemeral=True)
+                else:
+                    random_int = random.randint(1, 110)
+                    numbers_for_7days = range(1, 15)
+                    numbers_for_31days = range(15, 21)
+                    numbers_for_93days = range(21, 24)
+                    numbers_for_365days = 24
+
+                    if random_int in numbers_for_7days:
+                        await log_channel.send(
+                            f"✅ Payment Accepted — User: <@{self.user_id}> bought **7 days reward** for {price}$")
+                        await interaction_select.response.send_message(f"Kupiono **{selected_label}** za {price}$ ✅\n"
+                                                                       f"**Wygrana!** Wybierz nagrodę na **7 dni!** ✅",
+                                                                       ephemeral=True)
+                    elif random_int in numbers_for_31days:
+                        await log_channel.send(
+                            f"✅ Payment Accepted — User: <@{self.user_id}> bought **1 month reward** for {price}$")
+                        await interaction_select.response.send_message(f"Kupiono **{selected_label}** za {price}$ ✅\n"
+                                                                       f"**Wygrana!** Wybierz nagrodę na **1 miesiąc!** ✅",
+                                                                       ephemeral=True)
+                    elif random_int in numbers_for_93days:
+                        await log_channel.send(
+                            f"✅ Payment Accepted — User: <@{self.user_id}> bought **3 months reward** for {price}$")
+                        await interaction_select.response.send_message(f"Kupiono **{selected_label}** za {price}$ ✅\n"
+                                                                       f"**Wygrana!** Wybierz nagrodę na **3 miesiące!** ✅",
+                                                                       ephemeral=True)
+                    elif random_int == numbers_for_365days:
+                        await log_channel.send(
+                            f"✅ Payment Accepted — User: <@{self.user_id}> bought **1 year reward** for {price}$")
+                        await interaction_select.response.send_message(f"Kupiono **{selected_label}** za {price}$ ✅\n"
+                                                                       f"**Wygrana!** Wybierz nagrodę na **1 rok!** ✅",
+                                                                       ephemeral=True)
+                    else:
+                        await log_channel.send(
+                            f"❌ Payment Accepted — User: <@{self.user_id}> bought **{selected_label}** for {price}$")
+                        await interaction_select.response.send_message(f"Kupiłeś **{selected_label}** za {price}$ ✅\n"
+                                                                       f"**Przegrana!** Następnym razem się uda! ❌",
+                                                                       ephemeral=True)
+
             else:
                 await log_channel.send(
                     f"❌ Payment Denied — User: <@{self.user_id}> tried to buy **{selected_label}** but had only {self.user_points}$")
@@ -110,7 +155,7 @@ async def shop(ctx: commands.Context, is_private: bool = True) -> None:
     for option in options_to_buy:
         description += f"{option}\n"
 
-    shop_embed = discord.Embed(title="$ Sklep $", color=discord.Color.blue())
+    shop_embed = discord.Embed(title="💵 「Sklep」 💵", color=discord.Color.blue())
     shop_embed.description = description
     shop_embed.set_footer(text=f"Posiadasz {user_points}$")
 
