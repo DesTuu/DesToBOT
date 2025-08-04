@@ -1,5 +1,3 @@
-from random import randint
-
 from discord.ext import commands
 import discord
 import settings
@@ -8,7 +6,7 @@ import os
 import random
 
 options_to_buy = (
-    "- Czarna Skrzynka - 300$",
+    "- Tajemnicza Czarna Skrzynka - 300$",
     "- Swoja Własna Gradientowa Ranga (7 dni) - 1000$",
     "- Swój Własny Kanał (7 dni) - 1000$",
     "- Ranga Grappa Premium (7 dni) - 1000$",
@@ -81,13 +79,13 @@ class ShopView(discord.ui.View):
                 eco_points = eco_load_points()
                 eco_points[str(self.user_id)] = self.user_points
                 save_eco_points(eco_points)
-                if price != 200:
+                if price != 300:
                     await log_channel.send(
                         f"✅ Payment Accepted — User: <@{self.user_id}> bought **{selected_label}** for {price}$")
                     await interaction_select.response.send_message(f"Kupiono **{selected_label}** za {price}$ ✅",
                                                                    ephemeral=True)
                 else:
-                    random_int = random.randint(1, 110)
+                    random_int = random.randint(1, 100)
                     numbers_for_7days = range(1, 15)
                     numbers_for_31days = range(15, 21)
                     numbers_for_93days = range(21, 24)
