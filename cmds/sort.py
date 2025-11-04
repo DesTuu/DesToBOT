@@ -17,7 +17,7 @@ async def sort(ctx: commands.Context, category_id_str: str) -> None:
             return
         category = discord.utils.get(ctx.guild.categories, id=category_id)
         if category:
-            sorted_channels = sorted(category.channels, key=lambda c: c.name.split('│')[-1].strip())
+            sorted_channels = sorted(category.channels, key=lambda c: c.name[3:])
             await ctx.send(f"Zaczęto sortować kanały w kategorii **{category.name}**. Może to długo potrwać.",
                            ephemeral=True)
             for index, channel in enumerate(sorted_channels):
