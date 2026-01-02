@@ -8,10 +8,11 @@ class SquadMembers(commands.Cog):
         self.channel_id = 1269975070625763378
         self.message_id = 1347834429472505856
         self.legends_id = 1351135683846344726
-        self.bestie_id = 1310041042728517662
-
+        self.text_master_role_id = 1310041042728517662
+        self.voice_master_role_id = 1408897749654442004
         self.mention_legends = "<@&1351135683846344726>"
-        self.mention_bestie = "<@&1310041042728517662>"
+        self.mention_text_master_role = "<@&1310041042728517662>"
+        self.mention_voice_master_role = "<@&1408897749654442004>"
 
     def mention_user(self, id: int) -> str:
         return f"<@!{id}>"
@@ -33,7 +34,7 @@ class SquadMembers(commands.Cog):
         if before.roles == after.roles:
             return
 
-        target_roles = [self.bestie_id, self.legends_id]
+        target_roles = [self.text_master_role_id, self.legends_id, self.voice_master_role_id]
         after_role_ids = [role.id for role in after.roles]
 
         if not any(role_id in after_role_ids for role_id in target_roles):
@@ -58,7 +59,8 @@ class SquadMembers(commands.Cog):
             return
 
         legends = self.get_users_with_role(after.guild, self.legends_id)
-        besties = self.get_users_with_role(after.guild, self.bestie_id)
+        users_with_text_master_role = self.get_users_with_role(after.guild, self.text_master_role_id)
+        users_with_voice_master_role = self.get_users_with_role(after.guild, self.voice_master_role_id)
 
         string_to_send += f"## {self.mention_legends}\n"
         if legends:
@@ -67,11 +69,19 @@ class SquadMembers(commands.Cog):
         else:
             string_to_send += "- <brak>\n"
 
-        string_to_send += f"## {self.mention_bestie}\n"
-        if besties:
-            for bestie in besties:
-                if self.mention_user(bestie) not in string_to_send:
-                    string_to_send += f"- {self.mention_user(bestie)}\n"
+        string_to_send += f"## {self.mention_text_master_role}\n"
+        if users_with_text_master_role:
+            for user in users_with_text_master_role:
+                if self.mention_user(user) not in string_to_send:
+                    string_to_send += f"- {self.mention_user(user)}\n"
+        else:
+            string_to_send += "- <brak>\n"
+
+        string_to_send += f"## {self.mention_voice_master_role}\n"
+        if users_with_voice_master_role:
+            for user in users_with_voice_master_role:
+                if self.mention_user(user) not in string_to_send:
+                    string_to_send += f"- {self.mention_user(user)}\n"
         else:
             string_to_send += "- <brak>\n"
 

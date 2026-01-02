@@ -38,7 +38,7 @@ if __name__ == "__main__":
         task_loop.start()
 
 
-    @tasks.loop(hours=13)
+    @tasks.loop(hours=73)
     async def task_loop():
         await bot.change_presence(activity=random.choice(settings.activities))
 
@@ -85,10 +85,10 @@ if __name__ == "__main__":
                 logger.error(f"Error processing channel {channel.name}: {e}")
 
         channel_tasks = [
-            (bot.get_channel(1280585325978058884), 5, task_loop_functions.auto_concerts),
-            (bot.get_channel(1280584215624290414), 2, task_loop_functions.auto_weather),
-            (bot.get_channel(1280585526537093243), 4, task_loop_functions.auto_currencies),
-            (bot.get_channel(1280585391501742171), 3, task_loop_functions.async_auto_pracuj)
+            (bot.get_channel(1280585325978058884), 6, task_loop_functions.auto_concerts),
+            (bot.get_channel(1280584215624290414), 3, task_loop_functions.auto_weather),
+            (bot.get_channel(1280585526537093243), 6, task_loop_functions.auto_currencies),
+            (bot.get_channel(1280585391501742171), 6, task_loop_functions.async_auto_pracuj)
         ]
 
         for channel, delta_days, task_function in channel_tasks:
