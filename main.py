@@ -38,7 +38,7 @@ if __name__ == "__main__":
         task_loop.start()
 
 
-    @tasks.loop(hours=73)
+    @tasks.loop(hours=25)
     async def task_loop():
         await bot.change_presence(activity=random.choice(settings.activities))
 
