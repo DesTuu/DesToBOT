@@ -2,4 +2,14 @@
 
 db/
 
+<<<<<<< HEAD
 logs/
+=======
+logs/
+
+venv/
+
+.idea/
+
+__pycache__/
+>>>>>>> 55ca6ee (active_members)
