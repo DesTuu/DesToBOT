@@ -7,7 +7,7 @@ import settings
 )
 async def answer(ctx: commands.Context, message: str) -> None:
     answer_channel = ctx.bot.get_channel(1481382571207168155)
-    await answer_channel.send(message)
+    await answer_channel.send(f"### {ctx.author.mention}: {message}")
     await ctx.send("Odpowiedź wysłana!", ephemeral=True)
 
 
