@@ -45,7 +45,7 @@ async def quiz(ctx: commands.Context, is_private: bool = True) -> None:
 
     await ctx.send(
         f"{question1}?\n{emoji_1}: {answer2}\n{emoji_2}: {answer3}\n{emoji_3}: {answer4}\n{emoji_4}: {answer5}",
-        ephemeral=True
+        ephemeral=is_private
     )
 
 
