@@ -87,8 +87,7 @@ if __name__ == "__main__":
         channel_tasks = [
             (bot.get_channel(1280585325978058884), 6, task_loop_functions.auto_concerts),
             (bot.get_channel(1280584215624290414), 3, task_loop_functions.auto_weather),
-            (bot.get_channel(1280585526537093243), 6, task_loop_functions.auto_currencies),
-            (bot.get_channel(1280585391501742171), 6, task_loop_functions.async_auto_pracuj)
+            (bot.get_channel(1280585526537093243), 6, task_loop_functions.auto_currencies)
         ]
 
         for channel, delta_days, task_function in channel_tasks:
