@@ -44,7 +44,7 @@ ECO_POINTS_FILE = DB_DIR / "eco_points.json"
 
 def get_guild_names(bot):
     for i in bot.guilds:
-        yield i.name
+        yield i.name + ":)"
 
 
 def on_ready_message(bot):
