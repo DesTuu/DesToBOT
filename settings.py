@@ -8,11 +8,11 @@ import discord
 COOLDOWN_DURATION = 10
 
 activities = [
-    discord.Game(name='!help'),
-    discord.Streaming(name='!help', url='https://m.twitch.tv/destuuuuuuu'),
-    discord.Activity(name='!help', type=discord.ActivityType.listening),
-    discord.Activity(name='!help', type=discord.ActivityType.watching),
-    discord.Activity(name='!help', type=discord.ActivityType.competing)
+    discord.Game(name='/help'),
+    discord.Streaming(name='/help', url='https://m.twitch.tv/destuuuuuuu'),
+    discord.Activity(name='/help', type=discord.ActivityType.listening),
+    discord.Activity(name='/help', type=discord.ActivityType.watching),
+    discord.Activity(name='/help', type=discord.ActivityType.competing)
 ]
 
 PREFIX = "//"
