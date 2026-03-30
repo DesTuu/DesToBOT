@@ -19,27 +19,12 @@ class MyOnMessages(commands.Cog):
         self.last_ban_time = defaultdict(lambda: datetime.min)
 
         # -------------------------------------------------------------------------------------------------------------
-        # kult
-
-        self.alpha_swarms_channel = self.bot.get_channel(1130578727730942108)
-        self.pheno_role_id = 1136978383381741618
-        self.swarms_role_id = 1136020741310132274
-        self.alpha_swarms_role_id = 1130578727244402811
-        # self.allowed_authors = {1135619477157974127, 691440360605483119}
-
-        # -------------------------------------------------------------------------------------------------------------
         # bump
 
         self.points = self.load_points()
         self.bump_channel_id = 1255884970761916499
         self.bump_channel = self.bot.get_channel(self.bump_channel_id)
         self.bump_message = "Thx for bumping our Server! We will remind you in 2 hours!"
-
-        # -------------------------------------------------------------------------------------------------------------
-        # find_players
-
-        # self.find_players_channel_id = 1253761894750097519
-        # self.find_players_channel = self.bot.get_channel(self.find_players_channel_id)
 
     def load_points(self):
         if os.path.exists(settings.BUMP_POINTS_FILE):
@@ -55,13 +40,13 @@ class MyOnMessages(commands.Cog):
     # ---------------------------------------------------------------------------------------------------
     # last_bumper
 
-    def load_bumper(self):
-        with open(settings.LAST_BUMPER_FILE, "r") as f:
-            return json.load(f)
-
-    def save_bumper(self, data):
-        with open(settings.LAST_BUMPER_FILE, "w") as f:
-            json.dump(data, f, indent=4)
+    # def load_bumper(self):
+    #     with open(settings.LAST_BUMPER_FILE, "r") as f:
+    #         return json.load(f)
+    #
+    # def save_bumper(self, data):
+    #     with open(settings.LAST_BUMPER_FILE, "w") as f:
+    #         json.dump(data, f, indent=4)
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:
@@ -86,14 +71,14 @@ class MyOnMessages(commands.Cog):
         # -------------------------------------------------------------------------------------------------------------
         # kult
 
-        if message.guild.id == 1130578727223447582:
-            if isinstance(self.alpha_swarms_channel, discord.TextChannel):
-                if "@Phenomena" in message.content:
-                    await message.channel.send(f"<@&{self.pheno_role_id}>", silent=True)
-                elif "@Swarms" in message.content:
-                    await message.channel.send(f"<@&{self.swarms_role_id}>", silent=True)
-                elif "@Alpha Swarms" in message.content:
-                    await message.channel.send(f"<@&{self.alpha_swarms_role_id}>", silent=True)
+        # if message.guild.id == 1130578727223447582:
+        #     if isinstance(self.alpha_swarms_channel, discord.TextChannel):
+        #         if "@Phenomena" in message.content:
+        #             await message.channel.send(f"<@&{self.pheno_role_id}>", silent=True)
+        #         elif "@Swarms" in message.content:
+        #             await message.channel.send(f"<@&{self.swarms_role_id}>", silent=True)
+        #         elif "@Alpha Swarms" in message.content:
+        #             await message.channel.send(f"<@&{self.alpha_swarms_role_id}>", silent=True)
 
         # -------------------------------------------------------------------------------------------------------------
         # bump
@@ -107,34 +92,34 @@ class MyOnMessages(commands.Cog):
                     # -----------------------------------------------------------------------------
                     # last bumper
 
-                    bumper_data = self.load_bumper()
-
-                    if bumper_data:
-                        if user_id in bumper_data:
-                            bumper_data[user_id] += 1
-                        else:
-                            bumper_data = dict()
-                            bumper_data[user_id] = 1
-                    else:
-                        bumper_data = dict()
-                        bumper_data[user_id] = 1
-
-                    if bumper_data:
-                        self.save_bumper(bumper_data)
+                    # bumper_data = self.load_bumper()
+                    #
+                    # if bumper_data:
+                    #     if user_id in bumper_data:
+                    #         bumper_data[user_id] += 1
+                    #     else:
+                    #         bumper_data = dict()
+                    #         bumper_data[user_id] = 1
+                    # else:
+                    #     bumper_data = dict()
+                    #     bumper_data[user_id] = 1
+                    #
+                    # if bumper_data:
+                    #     self.save_bumper(bumper_data)
 
                     # ---------------------------------------------------------------------------------
                     # bump
 
-                    if bumper_data:
-                        self.points[user_id] = self.points.get(user_id, 0) + bumper_data[user_id]
-                        self.save_points()
+                    # if bumper_data:
+                    self.points[user_id] = self.points.get(user_id, 1)
+                    self.save_points()
 
                     # Send the bump confirmation message
-                        if isinstance(self.bump_channel, discord.TextChannel):
-                            await self.bump_channel.send(
-                                f"{bumper.mention} wzrasta Twoja ilość punktów o **+{bumper_data[user_id]}!** (do komendy /top_bump)\n"
-                                f"🔥 Bumpujesz nasz serwer **{bumper_data[user_id]}x** pod rząd! 🔥"
-                            )
+                    if isinstance(self.bump_channel, discord.TextChannel):
+                        await self.bump_channel.send(
+                            f"{bumper.mention} wzrasta Twoja ilość punktów (do komendy /top_bump)"
+                            # f"\n🔥 Bumpujesz nasz serwer **{bumper_data[user_id]}x** pod rząd! 🔥"
+                        )
 
         # -------------------------------------------------------------------------------------------------------------
         # find_players
