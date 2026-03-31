@@ -89,7 +89,7 @@ class VoiceTracker(commands.Cog):
                 print(f"OK (aktywny): {channel.name}")
 
     @commands.Cog.listener()
-    async def on_member_ban(self, *_):
+    async def on_guild_channel_create(self, *_): #krotka
         await self.process_channels()
 
     # @commands.Cog.listener()
