@@ -111,13 +111,13 @@ class MyOnMessages(commands.Cog):
                     # bump
 
                     # if bumper_data:
-                    self.points[user_id] = self.points.get(user_id, 1)
+                    self.points[user_id] = self.points.get(user_id, 0) + 1
                     self.save_points()
 
                     # Send the bump confirmation message
                     if isinstance(self.bump_channel, discord.TextChannel):
                         await self.bump_channel.send(
-                            f"{bumper.mention} wzrasta Twoja ilość punktów (do komendy /top_bump)"
+                            f"🔥 {bumper.mention} wzrasta Twoja ilość punktów o 1 (do komendy /top_bump) 🔥"
                             # f"\n🔥 Bumpujesz nasz serwer **{bumper_data[user_id]}x** pod rząd! 🔥"
                         )
 

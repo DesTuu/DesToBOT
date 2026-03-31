@@ -27,7 +27,7 @@ class AutoUnban(commands.Cog):
             user = ban.user
 
             if reason:
-                if "Dyno Autoban" in reason:
+                if "Zbyt świeże konto." in reason:
                     if datetime.now(timezone.utc) - user.created_at > timedelta(days=7):
                         await asyncio.sleep(20)
                         await guild.unban(user, reason="Autounban Rule `Konto na Discordzie dłużej niż 7 dni`")

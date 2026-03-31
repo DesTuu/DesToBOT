@@ -4,9 +4,6 @@ import logging
 import pathlib
 import discord
 
-
-COOLDOWN_DURATION = 10
-
 activities = [
     discord.Game(name='/help'),
     discord.Streaming(name='/help', url='https://m.twitch.tv/destuuuuuuu'),
@@ -16,31 +13,20 @@ activities = [
 ]
 
 PREFIX = "//"
-
+COOLDOWN_DURATION = 10
 HEARTBEAT_TIMEOUT = 60
-
 BASE_DIR = pathlib.Path(__file__).parent
 
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
-
 CMD_DIR = BASE_DIR / "cmds"
-
 COG_DIR = BASE_DIR / "cogs"
-
 DB_DIR = BASE_DIR / "db"
 
 BUMP_POINTS_FILE = DB_DIR / "bump_points.json"
-
 QUIZ_QUESTIONS_FILE = DB_DIR / "quiz_questions.txt"
-
-QUIZ_POINTS_FILE = DB_DIR / "quiz_points.json"
-
-LAST_BUMPER_FILE = DB_DIR / "last_bumper.json"
-
 LAST_MSG_ID = DB_DIR / "last_msg_id.txt"
 
-ECO_POINTS_FILE = DB_DIR / "eco_points.json"
 
 def get_guild_names(bot):
     for i in bot.guilds:
@@ -78,7 +64,7 @@ LOGGING_CONFIG = {
             "level": "INFO",
             "class": "logging.FileHandler",
             "filename": str(LOG_DIR / "infos.log"),
-            "mode": "w",
+            "mode": "a",
             "formatter": "verbose",
         },
     },
