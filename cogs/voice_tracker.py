@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import asyncio
 
 
@@ -21,7 +21,7 @@ class VoiceTracker(commands.Cog):
             return []
 
         messages = []
-        limit_date = datetime.now() - timedelta(days=40)
+        limit_date = datetime.now(timezone.utc) - timedelta(days=40)
 
         async for message in channel.history(limit=10000):
             if message.created_at < limit_date:
@@ -51,8 +51,10 @@ class VoiceTracker(commands.Cog):
                     if field.value:
                         text += field.value
 
+            # print(f"[DEBUG] {text}")
+
             # 🔥 kluczowe sprawdzenie (ID w linku)
-            if f"/{channel_id_str}" in text:
+            if f"{channel_id_str}" in text:
                 return True
 
         return False
@@ -86,12 +88,16 @@ class VoiceTracker(commands.Cog):
             else:
                 print(f"OK (aktywny): {channel.name}")
 
-    # 🔹 event bana
     @commands.Cog.listener()
-    async def on_member_ban(self, guild, user):
-        print(f"Ban wykryty: {user}")
-
+    async def on_member_ban(self, *_):
         await self.process_channels()
+
+    # @commands.Cog.listener()
+    # async def on_message(self, message):
+    #     if message.content == "banicja":
+    #         print(f"Ban wykryty")
+    #
+    #         await self.process_channels()
 
 
 async def setup(bot):
