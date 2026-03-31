@@ -21,7 +21,7 @@ class VoiceTracker(commands.Cog):
             return []
 
         messages = []
-        limit_date = datetime.now(timezone.utc) - timedelta(days=40)
+        limit_date = datetime.now(timezone.utc) - timedelta(days=30)
 
         async for message in channel.history(limit=10000):
             if message.created_at < limit_date:
