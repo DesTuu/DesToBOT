@@ -21,7 +21,7 @@ class VoiceTracker(commands.Cog):
             return []
 
         messages = []
-        limit_date = datetime.now(timezone.utc) - timedelta(days=30)
+        limit_date = datetime.now(timezone.utc) - timedelta(days=40)
 
         async for message in channel.history(limit=10000):
             if message.created_at < limit_date:
@@ -89,7 +89,7 @@ class VoiceTracker(commands.Cog):
                 print(f"OK (aktywny): {channel.name}")
 
     @commands.Cog.listener()
-    async def on_guild_channel_create(self, *_): #krotka
+    async def on_member_ban(self, *_): #krotka
         await self.process_channels()
 
     # @commands.Cog.listener()
