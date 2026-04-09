@@ -109,7 +109,7 @@ class GameMembers(commands.Cog):
                 return
 
             try:
-                pokemon_message = await pokemon_channel.fetch_message(self.minecraft_message_id)
+                pokemon_message = await pokemon_channel.fetch_message(self.pokemon_message_id)
             except discord.NotFound:
                 print(f"❌ Nie znaleziono wiadomości o tym ID")
                 return
