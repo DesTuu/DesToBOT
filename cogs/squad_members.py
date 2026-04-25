@@ -5,10 +5,10 @@ from discord.ext import commands
 class SquadMembers(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel_id = 1269975070625763378
+        self.channel_id = 1497525213531738112
 
-        self.voice_message_id = 1479602886341296320
-        self.text_message_id = 1479602921841623213
+        self.voice_message_id = 1497529627835629618
+        self.text_message_id = 1497529663428235376
 
         self.voice_master_role_id = 1408897749654442004
         self.voice_diamond_role_id = 1315707236776935474
