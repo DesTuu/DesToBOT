@@ -21,9 +21,9 @@ class VoiceTracker(commands.Cog):
             return []
 
         messages = []
-        limit_date = datetime.now(timezone.utc) - timedelta(days=50)
+        limit_date = datetime.now(timezone.utc) - timedelta(days=35)
 
-        async for message in channel.history(limit=20000):
+        async for message in channel.history(limit=12000):
             if message.created_at < limit_date:
                 break
             messages.append(message)
