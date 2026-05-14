@@ -9,6 +9,8 @@ EXCLUDED_CHANNEL_ID = 1412829208018812938
 
 ALLOWED_USER_ID = 354712325053218819
 
+LOG_CHANNEL_ID = 1504504794897973289
+
 move_cooldown = {}
 access_cooldown = {}
 
@@ -39,6 +41,15 @@ def has_connect_permission(channel: discord.VoiceChannel, user: discord.Member):
     return channel.permissions_for(user).connect
 
 
+async def send_log(guild, text):
+    log_channel = guild.get_channel(LOG_CHANNEL_ID)
+
+    if not log_channel:
+        return
+
+    await log_channel.send(text)
+
+
 # =========================
 # MAIN PANEL
 # =========================
@@ -47,13 +58,20 @@ class RequestMainView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Przenieś mnie", style=discord.ButtonStyle.primary, custom_id="req_move")
+    @discord.ui.button(
+        label="Przenieś mnie",
+        style=discord.ButtonStyle.primary,
+        custom_id="req_move"
+    )
     async def move_me(self, interaction, button):
 
         category = interaction.guild.get_channel(VOICE_CATEGORY_ID)
 
         if not isinstance(category, discord.CategoryChannel):
-            return await interaction.response.send_message("Brak kategorii", ephemeral=True)
+            return await interaction.response.send_message(
+                "Brak kategorii",
+                ephemeral=True
+            )
 
         await interaction.response.send_message(
             "Wybierz kanał:",
@@ -61,13 +79,20 @@ class RequestMainView(discord.ui.View):
             ephemeral=True
         )
 
-    @discord.ui.button(label="Daj mi dostęp", style=discord.ButtonStyle.success, custom_id="req_access")
+    @discord.ui.button(
+        label="Daj mi dostęp",
+        style=discord.ButtonStyle.success,
+        custom_id="req_access"
+    )
     async def access_me(self, interaction, button):
 
         category = interaction.guild.get_channel(VOICE_CATEGORY_ID)
 
         if not isinstance(category, discord.CategoryChannel):
-            return await interaction.response.send_message("Brak kategorii", ephemeral=True)
+            return await interaction.response.send_message(
+                "Brak kategorii",
+                ephemeral=True
+            )
 
         await interaction.response.send_message(
             "Wybierz kanał:",
@@ -87,6 +112,7 @@ class ChannelSelectView(discord.ui.View):
         valid_channels = []
 
         for ch in category.voice_channels:
+
             if ch.id == EXCLUDED_CHANNEL_ID:
                 continue
 
@@ -94,10 +120,19 @@ class ChannelSelectView(discord.ui.View):
                 valid_channels.append(ch)
 
         if not valid_channels:
-            options = [discord.SelectOption(label="Brak kanałów", value="0")]
+            options = [
+                discord.SelectOption(
+                    label="Brak kanałów",
+                    value="0"
+                )
+            ]
+
         else:
             options = [
-                discord.SelectOption(label=ch.name[:100], value=str(ch.id))
+                discord.SelectOption(
+                    label=ch.name[:100],
+                    value=str(ch.id)
+                )
                 for ch in valid_channels[:25]
             ]
 
@@ -122,13 +157,17 @@ class ChannelSelect(discord.ui.Select):
     async def callback(self, interaction):
 
         if self.values[0] == "0":
-            return await interaction.response.send_message("Brak kanałów", ephemeral=True)
+            return await interaction.response.send_message(
+                "Brak kanałów",
+                ephemeral=True
+            )
 
         channel = interaction.guild.get_channel(int(self.values[0]))
         user = interaction.user
 
         if self.action == "move":
             await self.handle_move(interaction, channel, user)
+
         else:
             await self.handle_access(interaction, channel, user)
 
@@ -139,22 +178,42 @@ class ChannelSelect(discord.ui.Select):
     async def handle_move(self, interaction, channel, user):
 
         if has_connect_permission(channel, user):
-            return await interaction.response.send_message("Masz już dostęp", ephemeral=True)
+            return await interaction.response.send_message(
+                "Masz już dostęp",
+                ephemeral=True
+            )
 
         if not user.voice:
-            return await interaction.response.send_message("Wejdź na VC", ephemeral=True)
+            return await interaction.response.send_message(
+                "Wejdź na VC",
+                ephemeral=True
+            )
 
         cd, left = is_on_cooldown(move_cooldown, user.id)
 
         if cd:
-            return await interaction.response.send_message(f"⏳ {left}s", ephemeral=True)
+            return await interaction.response.send_message(
+                f"⏳ {left}s",
+                ephemeral=True
+            )
 
         await user.move_to(channel)
 
-        ch = interaction.guild.get_channel(REQUEST_CHANNEL_ID)
-        await ch.send(f"✅ {user.mention} → {channel.mention}")
+        await send_log(
+            interaction.guild,
+            f"## 🔄 {user.mention} został przeniesiony do {channel.mention}"
+        )
 
-        await interaction.response.send_message("OK", ephemeral=True)
+        ch = interaction.guild.get_channel(REQUEST_CHANNEL_ID)
+
+        await ch.send(
+            f"✅ {user.mention} → {channel.mention}"
+        )
+
+        await interaction.response.send_message(
+            "OK",
+            ephemeral=True
+        )
 
     # =========================
     # ACCESS
@@ -163,15 +222,24 @@ class ChannelSelect(discord.ui.Select):
     async def handle_access(self, interaction, channel, user):
 
         if has_connect_permission(channel, user):
-            return await interaction.response.send_message("Masz już dostęp", ephemeral=True)
+            return await interaction.response.send_message(
+                "Masz już dostęp",
+                ephemeral=True
+            )
 
         if not user.voice:
-            return await interaction.response.send_message("Wejdź na VC", ephemeral=True)
+            return await interaction.response.send_message(
+                "Wejdź na VC",
+                ephemeral=True
+            )
 
         cd, left = is_on_cooldown(access_cooldown, user.id)
 
         if cd:
-            return await interaction.response.send_message(f"⏳ {left}s", ephemeral=True)
+            return await interaction.response.send_message(
+                f"⏳ {left}s",
+                ephemeral=True
+            )
 
         view = AccessDecisionView(user.id, channel.id)
 
@@ -182,9 +250,17 @@ class ChannelSelect(discord.ui.Select):
             view=view
         )
 
+        await send_log(
+            interaction.guild,
+            f"## 📩 {user.mention} wysłał prośbę o dostęp do {channel.mention}"
+        )
+
         view.message = msg
 
-        await interaction.response.send_message("Wysłano", ephemeral=True)
+        await interaction.response.send_message(
+            "Wysłano",
+            ephemeral=True
+        )
 
 
 # =========================
@@ -193,28 +269,38 @@ class ChannelSelect(discord.ui.Select):
 
 class AccessDecisionView(discord.ui.View):
     def __init__(self, user_id, channel_id):
-        super().__init__(timeout=600)  # ✅ 10 min
+        super().__init__(timeout=600)
+
         self.user_id = user_id
         self.channel_id = channel_id
         self.message = None
 
     def is_owner(self, interaction):
         channel = interaction.guild.get_channel(self.channel_id)
-        return channel.permissions_for(interaction.user).manage_channels
 
-    # ✅ AUTO DELETE
+        return channel.permissions_for(
+            interaction.user
+        ).manage_channels
+
     async def on_timeout(self):
         try:
             if self.message:
                 await self.message.delete()
+
         except:
             pass
 
-    @discord.ui.button(label="Akceptuj", style=discord.ButtonStyle.success)
+    @discord.ui.button(
+        label="Akceptuj",
+        style=discord.ButtonStyle.success
+    )
     async def accept(self, interaction, button):
 
         if not self.is_owner(interaction):
-            return await interaction.response.send_message("Nie jesteś ownerem", ephemeral=True)
+            return await interaction.response.send_message(
+                "Nie jesteś ownerem",
+                ephemeral=True
+            )
 
         channel = interaction.guild.get_channel(self.channel_id)
         user = interaction.guild.get_member(self.user_id)
@@ -222,7 +308,19 @@ class AccessDecisionView(discord.ui.View):
         overwrite = channel.overwrites_for(user)
         overwrite.connect = True
 
-        await channel.set_permissions(user, overwrite=overwrite)
+        await channel.set_permissions(
+            user,
+            overwrite=overwrite
+        )
+
+        await send_log(
+            interaction.guild,
+            (
+                f"## ✅ {interaction.user.mention} zaakceptował dostęp\n"
+                f"👤 Użytkownik: {user.mention}\n"
+                f"🔊 Kanał: {channel.mention}"
+            )
+        )
 
         await interaction.message.edit(
             content=(
@@ -233,13 +331,33 @@ class AccessDecisionView(discord.ui.View):
             view=None
         )
 
-        await interaction.response.send_message("OK", ephemeral=True)
+        await interaction.response.send_message(
+            "OK",
+            ephemeral=True
+        )
 
-    @discord.ui.button(label="Odrzuć", style=discord.ButtonStyle.danger)
+    @discord.ui.button(
+        label="Odrzuć",
+        style=discord.ButtonStyle.danger
+    )
     async def reject(self, interaction, button):
 
         if not self.is_owner(interaction):
-            return await interaction.response.send_message("Nie jesteś ownerem", ephemeral=True)
+            return await interaction.response.send_message(
+                "Nie jesteś ownerem",
+                ephemeral=True
+            )
+
+        channel = interaction.guild.get_channel(self.channel_id)
+
+        await send_log(
+            interaction.guild,
+            (
+                f"## ❌ {interaction.user.mention} odrzucił dostęp\n"
+                f"👤 Użytkownik: <@{self.user_id}>\n"
+                f"🔊 Kanał: {channel.mention}"
+            )
+        )
 
         await interaction.message.edit(
             content=(
@@ -250,7 +368,10 @@ class AccessDecisionView(discord.ui.View):
             view=None
         )
 
-        await interaction.response.send_message("OK", ephemeral=True)
+        await interaction.response.send_message(
+            "OK",
+            ephemeral=True
+        )
 
 
 # =========================
@@ -261,9 +382,15 @@ class AccessDecisionView(discord.ui.View):
 async def button_requests(ctx):
 
     if ctx.author.id != ALLOWED_USER_ID:
-        return await ctx.send("Brak dostępu", ephemeral=True)
+        return await ctx.send(
+            "Brak dostępu",
+            ephemeral=True
+        )
 
-    await ctx.send("# Panel requestów", view=RequestMainView())
+    await ctx.send(
+        "# Panel requestów",
+        view=RequestMainView()
+    )
 
 
 # =========================
