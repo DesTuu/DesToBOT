@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+# === ROLE IDS ===
 HEADADMIN_ROLE_ID = 0
 VICEADMIN_ROLE_ID = 0
 MODERATOR_ROLE_ID = 0
@@ -12,15 +13,16 @@ MID_ROLE_ID = 0
 JUNIOR_ROLE_ID = 0
 INTERN_ROLE_ID = 0
 
-CHANNEL_ID = 0 
-MESSAGE_ID = 0 
+# === CONFIG ===
+CHANNEL_ID = 0
+MESSAGE_ID = 0
+LOG_CHANNEL_ID = 0
 
 
-class AutoAdmin(commands.Cog):
+class AdminList(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # 🔹 ustalanie rangi (prefix)
     def get_rank(self, member: discord.Member):
         if discord.utils.get(member.roles, id=SENIOR_ROLE_ID):
             return "senior"
@@ -30,13 +32,11 @@ class AutoAdmin(commands.Cog):
             return "junior"
         if discord.utils.get(member.roles, id=INTERN_ROLE_ID):
             return "intern"
-        return "intern"  # fallback
+        return "intern"
 
-    # 🔹 formatowanie użytkownika
     def format_member(self, member: discord.Member):
         return f"{self.get_rank(member)} <@{member.id}>"
 
-    # 🔹 pobieranie członków do sekcji
     def get_sections(self, guild):
         sections = {
             "headadmin": [],
@@ -59,12 +59,10 @@ class AutoAdmin(commands.Cog):
 
         return sections
 
-    # 🔹 sortowanie wg rangi
     def sort_members(self, members):
         order = {"senior": 0, "mid": 1, "junior": 2, "intern": 3}
         return sorted(members, key=lambda m: order[self.get_rank(m)])
 
-    # 🔹 budowanie sekcji
     def build_section(self, role_id, members):
         if not members:
             return ""
@@ -76,8 +74,21 @@ class AutoAdmin(commands.Cog):
 
         return text
 
-    # 🔥 GŁÓWNA funkcja aktualizacji
-    async def update_list(self, guild):
+    async def send_log(self, guild, description):
+        log_channel = guild.get_channel(LOG_CHANNEL_ID)
+        if not log_channel:
+            return
+
+        embed = discord.Embed(
+            title="📋 Aktualizacja administracji",
+            description=description,
+            color=discord.Color.blue()
+        )
+        embed.timestamp = discord.utils.utcnow()
+
+        await log_channel.send(embed=embed)
+
+    async def update_list(self, guild, reason="Automatyczna aktualizacja"):
         channel = guild.get_channel(CHANNEL_ID)
         if not channel:
             return
@@ -85,19 +96,19 @@ class AutoAdmin(commands.Cog):
         sections = self.get_sections(guild)
 
         content = "# Skład Administracji\n"
-
         content += self.build_section(HEADADMIN_ROLE_ID, sections["headadmin"])
         content += self.build_section(VICEADMIN_ROLE_ID, sections["viceadmin"])
         content += self.build_section(MODERATOR_ROLE_ID, sections["moderator"])
         content += self.build_section(HELPER_ROLE_ID, sections["helper"])
 
-        content = content[:2000]  # limit Discorda
+        content = content[:2000]
 
-        # ✅ zawsze edytujemy istniejącą wiadomość
         msg = await channel.fetch_message(MESSAGE_ID)
         await msg.edit(content=content)
 
-    # 🔥 EVENT: zmiana ról
+        # ✅ LOG
+        await self.send_log(guild, f"Lista administracji została zaktualizowana.\nPowód: **{reason}**")
+
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
         before_roles = set(r.id for r in before.roles)
@@ -116,10 +127,14 @@ class AutoAdmin(commands.Cog):
         }
 
         if before_roles != after_roles:
-            if watched_roles.intersection(before_roles ^ after_roles):
-                await self.update_list(after.guild)
+            changed = before_roles ^ after_roles
+
+            if watched_roles.intersection(changed):
+                await self.update_list(
+                    after.guild,
+                    reason=f"Zmiana ról u <@{after.id}>"
+                )
 
 
-# 🔹 setup
 async def setup(bot):
-    await bot.add_cog(AutoAdmin(bot))
+    await bot.add_cog(AdminList(bot))
