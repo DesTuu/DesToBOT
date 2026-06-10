@@ -1,6 +1,7 @@
-from discord.ext import commands
-import discord
 import asyncio
+
+import discord
+from discord.ext import commands
 
 REQUEST_CHANNEL_ID = 1502586028135809125
 
@@ -11,16 +12,15 @@ active_requests = {}
 # 🔧 HELPERS
 # =========================
 
+
 def get_manage_channel_users(channel: discord.VoiceChannel):
-    return [
-        m for m in channel.members
-        if channel.permissions_for(m).manage_channels
-    ]
+    return [m for m in channel.members if channel.permissions_for(m).manage_channels]
 
 
 # =========================
 # 🔧 CLEANER
 # =========================
+
 
 async def request_cleaner(bot: commands.Bot):
     await bot.wait_until_ready()
@@ -42,30 +42,36 @@ async def request_cleaner(bot: commands.Bot):
 # 🔧 MAIN PANEL
 # =========================
 
+
 class RequestMainView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Przenieś mnie", style=discord.ButtonStyle.primary, custom_id="req_move")
-    async def move_me(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(
+        label="Przenieś mnie", style=discord.ButtonStyle.primary, custom_id="req_move"
+    )
+    async def move_me(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         await interaction.response.send_message(
-            "Wybierz kanał voice:",
-            view=MoveSelectView(),
-            ephemeral=True
+            "Wybierz kanał voice:", view=MoveSelectView(), ephemeral=True
         )
 
-    @discord.ui.button(label="Daj mi dostęp", style=discord.ButtonStyle.success, custom_id="req_access")
-    async def access_me(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(
+        label="Daj mi dostęp", style=discord.ButtonStyle.success, custom_id="req_access"
+    )
+    async def access_me(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         await interaction.response.send_message(
-            "Wybierz kanał voice:",
-            view=AccessSelectView(),
-            ephemeral=True
+            "Wybierz kanał voice:", view=AccessSelectView(), ephemeral=True
         )
 
 
 # =========================
 # 🔧 MOVE SYSTEM (SAFE - NO channel_select)
 # =========================
+
 
 class MoveSelectView(discord.ui.View):
     def __init__(self):
@@ -75,39 +81,47 @@ class MoveSelectView(discord.ui.View):
             discord.ui.ChannelSelect(
                 placeholder="Wybierz kanał voice",
                 channel_types=[discord.ChannelType.voice],
-                custom_id="move_select"
+                custom_id="move_select",
             )
         )
 
     @discord.ui.select(custom_id="move_select")
-    async def callback(self, interaction: discord.Interaction, select: discord.ui.ChannelSelect):
+    async def callback(
+        self, interaction: discord.Interaction, select: discord.ui.ChannelSelect
+    ):
 
         user = interaction.user
         channel = select.values[0]
 
         if not isinstance(channel, discord.VoiceChannel):
-            return await interaction.response.send_message("Błąd kanału.", ephemeral=True)
+            return await interaction.response.send_message(
+                "Błąd kanału.", ephemeral=True
+            )
 
         if not user.voice or not user.voice.channel:
-            return await interaction.response.send_message("Nie jesteś na voice.", ephemeral=True)
+            return await interaction.response.send_message(
+                "Nie jesteś na voice.", ephemeral=True
+            )
 
         try:
             await user.move_to(channel)
         except discord.Forbidden:
-            return await interaction.response.send_message("Brak permisji do przenoszenia.", ephemeral=True)
+            return await interaction.response.send_message(
+                "Brak permisji do przenoszenia.", ephemeral=True
+            )
 
         managers = get_manage_channel_users(channel)
         ping = " ".join(m.mention for m in managers) if managers else "Brak moderatorów"
 
         await interaction.response.send_message(
-            f"Przeniesiono do {channel.mention}\nPing: {ping}",
-            ephemeral=True
+            f"Przeniesiono do {channel.mention}\nPing: {ping}", ephemeral=True
         )
 
 
 # =========================
 # 🔧 ACCESS SYSTEM (SAFE)
 # =========================
+
 
 class AccessSelectView(discord.ui.View):
     def __init__(self):
@@ -117,26 +131,29 @@ class AccessSelectView(discord.ui.View):
             discord.ui.ChannelSelect(
                 placeholder="Wybierz kanał voice",
                 channel_types=[discord.ChannelType.voice],
-                custom_id="access_select"
+                custom_id="access_select",
             )
         )
 
     @discord.ui.select(custom_id="access_select")
-    async def callback(self, interaction: discord.Interaction, select: discord.ui.ChannelSelect):
+    async def callback(
+        self, interaction: discord.Interaction, select: discord.ui.ChannelSelect
+    ):
 
         guild = interaction.guild
         user = interaction.user
         channel = select.values[0]
 
         if not isinstance(channel, discord.VoiceChannel):
-            return await interaction.response.send_message("Błąd kanału.", ephemeral=True)
+            return await interaction.response.send_message(
+                "Błąd kanału.", ephemeral=True
+            )
 
         owners = get_manage_channel_users(channel)
 
         if not owners:
             return await interaction.response.send_message(
-                "Brak osób z Manage Channels.",
-                ephemeral=True
+                "Brak osób z Manage Channels.", ephemeral=True
             )
 
         request_id = len(active_requests) + 1
@@ -150,13 +167,13 @@ class AccessSelectView(discord.ui.View):
             f"User: {user.mention}\n"
             f"Channel: {channel.mention}\n\n"
             f"Decydują: {', '.join(o.mention for o in owners)}",
-            view=view
+            view=view,
         )
 
         active_requests[request_id] = {
             "user_id": user.id,
             "channel_id": channel.id,
-            "done": False
+            "done": False,
         }
 
         await interaction.response.send_message("Wysłano request.", ephemeral=True)
@@ -165,6 +182,7 @@ class AccessSelectView(discord.ui.View):
 # =========================
 # 🔧 ACCEPT / REJECT
 # =========================
+
 
 class AccessDecisionView(discord.ui.View):
     def __init__(self, user_id: int, channel_id: int, request_id: int):
@@ -206,16 +224,14 @@ class AccessDecisionView(discord.ui.View):
 # 🔧 COMMAND
 # =========================
 
+
 @commands.hybrid_command()
-async def button_requests(ctx: commands.Context):
+async def button_lobby(ctx: commands.Context):
     await ctx.defer()
 
     channel = ctx.bot.get_channel(REQUEST_CHANNEL_ID)
 
-    await channel.send(
-        "# Requests Panel",
-        view=RequestMainView()
-    )
+    await channel.send("# Requests Panel", view=RequestMainView())
 
     await ctx.send("Panel utworzony", ephemeral=True)
 
@@ -224,8 +240,9 @@ async def button_requests(ctx: commands.Context):
 # 🔧 SETUP
 # =========================
 
+
 async def setup(bot: commands.Bot):
-    bot.add_command(button_requests)
+    bot.add_command(button_lobby)
     bot.add_view(RequestMainView())
 
     asyncio.create_task(request_cleaner(bot))
